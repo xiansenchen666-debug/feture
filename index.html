@@ -151,7 +151,12 @@
     <transition name="fade" mode="out-in">
         
         <!-- ================= INTRO STEP 1: 引言 ================= -->
-        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
+        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
+            <div class="absolute top-8 right-8 flex items-center gap-3 opacity-70 bg-slate-900/50 px-4 py-1.5 rounded-full border border-gold/20 backdrop-blur-sm">
+                <div class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></div>
+                <span class="font-en text-[10px] text-gold tracking-widest uppercase font-medium">Verified: Cary</span>
+            </div>
+            
             <div class="mb-8 opacity-80 mt-4">
                 <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase font-semibold">Soul Matrix</p>
                 <div class="accent-line"></div>
@@ -163,7 +168,7 @@
             
             <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-slate-300 leading-loose tracking-[0.2em] font-light">
                 <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-sm">
-                    “我是谁？”<br>
+                    “欢迎归来，Cary。”<br>
                     “生从何来，死往何处？”
                 </p>
                 <p>自仰望星空起，</p>
