@@ -152,10 +152,6 @@
         
         <!-- ================= INTRO STEP 1: 引言 ================= -->
         <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-8 right-8 flex items-center gap-3 opacity-70 bg-slate-900/50 px-4 py-1.5 rounded-full border border-gold/20 backdrop-blur-sm">
-                <div class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></div>
-                <span class="font-en text-[10px] text-gold tracking-widest uppercase font-medium">Verified: Cary</span>
-            </div>
             
             <div class="mb-8 opacity-80 mt-4">
                 <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase font-semibold">Soul Matrix</p>
@@ -168,8 +164,8 @@
             
             <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-slate-300 leading-loose tracking-[0.2em] font-light">
                 <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-sm">
-                    “欢迎归来，Cary。”<br>
-                    “生从何来，死往何处？”
+                    “我是谁？”<br>
+                    “生从何来，归往何处？”
                 </p>
                 <p>自仰望星空起，</p>
                 <p>人类的叩问从未停止。</p>
@@ -180,6 +176,13 @@
                 <span class="relative z-10 font-medium">凝视深渊 <span class="font-en text-xs ml-2">→</span></span>
                 <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
             </button>
+
+            <!-- Author Signature -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-60 flex items-center gap-2">
+                <span class="w-4 h-[1px] bg-gold/50"></span>
+                <span class="font-en text-[10px] text-slate-400 tracking-[0.3em] uppercase">Created by <span class="text-gold font-medium">Cary</span></span>
+                <span class="w-4 h-[1px] bg-gold/50"></span>
+            </div>
         </div>
 
         <!-- ================= INTRO STEP 2: 维度 1 & 2 ================= -->
@@ -492,10 +495,10 @@
             ]
         },
         originDest: {
-            'C_V': ["生于璀璨星尘，死往永恒虚空。", "从光之海中析出，终将归于绝对的宁静。", "起源于超新星的余烬，湮灭于宇宙热寂。"],
-            'C_B': ["生于璀璨星尘，死往无尽轮回。", "带着高维的印记降生，将在无数个硅基世界流浪。", "从银河旋臂而来，向着多重宇宙的裂隙而去。"],
-            'T_V': ["生于厚重黄土，死往永恒虚空。", "从泥泞与岩浆中爬起，最终消散于寂灭的风中。", "带着大地母亲的脉动，走向没有重力的绝对虚无。"],
-            'T_B': ["生于厚重黄土，死往无尽轮回。", "以碳基之躯承载远古记忆，在生生世世中不断涅槃。", "从最原始的部落文明走来，奔向无数个未知的异星家园。"]
+            'C_V': ["生于璀璨星尘，归往永恒虚空。", "从光之海中析出，终将归于绝对的宁静。", "起源于超新星的余烬，湮灭于宇宙热寂。"],
+            'C_B': ["生于璀璨星尘，奔向无尽轮回。", "带着高维的印记降生，将在无数个硅基世界流浪。", "从银河旋臂而来，向着多重宇宙的裂隙而去。"],
+            'T_V': ["生于厚重黄土，化作永恒虚空。", "从泥泞与岩浆中爬起，最终消散于寂灭的风中。", "带着大地母亲的脉动，走向没有重力的绝对虚无。"],
+            'T_B': ["生于厚重黄土，奔向无尽轮回。", "以碳基之躯承载远古记忆，在生生世世中不断涅槃。", "从最原始的部落文明走来，奔向无数个未知的异星家园。"]
         },
         past: {
             'C': [
@@ -506,7 +509,7 @@
             'T': [
                 "你曾是古老地球上最原始文明的祭司。在篝火旁，你用双手在泥土上刻下人类第一部法典，你的指甲里至今还残留着那片土地的红壤气息。",
                 "在亚特兰蒂斯沉没之前，你是一位掌握大地共振规律的学者。你曾试图用晶石挽救文明的倾覆，海水吞没你的那一刻，你将知识封印在了灵魂深处。",
-                "你曾无数次化作飞鸟与走兽，深刻体验过这颗蓝色星球最原始的血与火、生与死。每一次心跳的停止，都让你对这片土地爱得更加深沉。"
+                "你曾无数次化作飞鸟与走兽，深刻体验过这颗蓝色星球最原始的血与火、生与灭。每一次脉搏的停息，都让你对这片土地爱得更加深沉。"
             ]
         },
         future: {
@@ -517,7 +520,7 @@
             ],
             'B': [
                 "你将降生于一个没有重力的硅基星球。在那里，沟通不再需要语言，而是依靠意识光谱的交叠。你将以全新的形态，继续探索生命的无限可能。",
-                "死亡对你而言只是一扇门。下一世，你可能会成为某个双星系统中的流浪商人，或者是某个正在经历冰河期的原始星球上的火种保留者。",
+                "生命的终点对你而言只是一扇门。下一世，你可能会成为某个双星系统中的流浪商人，或者是某个正在经历冰河期的原始星球上的火种保留者。",
                 "你的灵魂蓝图太过庞大，一世的时间根本无法演练完毕。你将在平行宇宙中再次醒来，面对截然不同的物理法则，开启下一场伟大的冒险。"
             ]
         },
@@ -540,7 +543,7 @@
                 "为了收集数据。你的灵魂是一个庞大图书馆的终端机，你在此经历的所有情感波动、爱恨情仇，最终都会化作宇宙意识进化的养分。"
             ],
             'R': [
-                "为了改变。世界在停滞中呼唤破局者，你的到来是为了推动命运的齿轮，让死水重新流动。哪怕要承受被误解的孤独。",
+                "为了改变。世界在停滞中呼唤破局者，你的到来是为了推动命运的齿轮，让停滞的水流重新涌动。哪怕要承受被误解的孤独。",
                 "你是一团火，降生于寒冬。你之所以出现在这里，是因为旧的秩序需要被打破，你的灵魂里携带着重建新世界的密码。",
                 "为了修复这片土地的创伤。你不是来享受的，你是来工作的。你的双手拥有重塑现实的力量，你将把混乱编织成新的和谐。"
             ]
