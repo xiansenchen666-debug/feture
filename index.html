@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灵魂寻迹 - 前世今生与未来</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #050510;
+            color: #e5e7eb;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(20, 20, 40, 1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(20, 10, 40, 1), transparent 25%);
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .option-btn {
+            transition: all 0.3s ease;
+        }
+        .option-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .star {
+            position: fixed;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle infinite alternate;
+            z-index: -1;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+<div id="app" class="w-full max-w-lg min-h-[80vh] flex flex-col relative">
+    
+    <!-- 星空背景生成 -->
+    <div v-for="n in 30" :key="n" class="star" 
+         :style="{ 
+             top: Math.random() * 100 + '%', 
+             left: Math.random() * 100 + '%', 
+             width: (Math.random() * 2 + 1) + 'px', 
+             height: (Math.random() * 2 + 1) + 'px',
+             animationDuration: (Math.random() * 3 + 2) + 's' 
+         }">
+    </div>
+
+    <transition name="fade" mode="out-in">
+        <!-- 欢迎页 -->
+        <div v-if="step === 'welcome'" key="welcome" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-2xl">
+            <h1 class="text-3xl md:text-4xl font-semibold mb-6 tracking-widest text-white drop-shadow-lg">灵魂寻迹</h1>
+            <p class="text-sm md:text-base text-gray-400 mb-8 leading-relaxed tracking-wider">
+                生从何来，死往何处？<br>
+                你是谁，你的爱人在哪里？<br>
+                在宇宙的阿卡夏记录中，<br>
+                寻找属于你的宿命档案。
+            </p>
+            <button @click="startTest" class="px-8 py-3 rounded-full border border-gray-500 text-gray-300 hover:text-white hover:border-white transition-all duration-300 tracking-widest">
+                开启寻迹
+            </button>
+        </div>
+
+        <!-- 答题页 -->
+        <div v-else-if="step === 'question'" :key="'q'+currentQuestionIndex" class="flex flex-col justify-center flex-1 glass-panel p-6 md:p-8 rounded-2xl">
+            <div class="mb-8 flex items-center justify-between text-xs text-gray-500 tracking-widest">
+                <span>{{ questions[currentQuestionIndex].id }}</span>
+                <span>{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+            </div>
+            
+            <h2 class="text-xl md:text-2xl font-medium mb-10 leading-relaxed tracking-wide">
+                {{ questions[currentQuestionIndex].text }}
+            </h2>
+
+            <div class="space-y-4">
+                <button v-for="(opt, idx) in questions[currentQuestionIndex].options" :key="idx" 
+                        @click="answerQuestion(opt.value)"
+                        class="option-btn w-full text-left p-5 rounded-xl border border-gray-700 bg-black/20 text-sm md:text-base leading-relaxed tracking-wide">
+                    {{ opt.text }}
+                </button>
+            </div>
+        </div>
+
+        <!-- 加载页 -->
+        <div v-else-if="step === 'loading'" key="loading" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-2xl">
+            <div class="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin mb-6"></div>
+            <p class="text-gray-400 tracking-widest animate-pulse">正在连接阿卡夏记录...</p>
+        </div>
+
+        <!-- 结果页 -->
+        <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-8 rounded-2xl overflow-y-auto max-h-[90vh]">
+            <h1 class="text-2xl md:text-3xl font-semibold mb-8 text-center tracking-widest border-b border-gray-700 pb-4">
+                你的宿命档案
+            </h1>
+
+            <div class="space-y-8 text-sm md:text-base text-gray-300 leading-relaxed tracking-wide">
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 我是谁 】</h3>
+                    <p class="text-xl text-white tracking-widest mb-2">{{ result.identity }}</p>
+                    <p class="text-xs text-gray-500">灵魂代码: {{ finalCode }}</p>
+                </section>
+
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 生从何来，死往何处 】</h3>
+                    <p>{{ result.originDest }}</p>
+                </section>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <section class="bg-white/5 p-4 rounded-lg border border-white/5">
+                        <h3 class="text-white font-medium mb-2 opacity-80 text-sm">【 前世 】</h3>
+                        <p class="text-sm">{{ result.past }}</p>
+                    </section>
+                    <section class="bg-white/5 p-4 rounded-lg border border-white/5">
+                        <h3 class="text-white font-medium mb-2 opacity-80 text-sm">【 下一世 】</h3>
+                        <p class="text-sm">{{ result.future }}</p>
+                    </section>
+                </div>
+
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 今生宿命 】</h3>
+                    <p>{{ result.present }}</p>
+                </section>
+
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 为什么要出现这个世界 】</h3>
+                    <p>{{ result.whyHere }}</p>
+                </section>
+
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 我的出现意味着什么 】</h3>
+                    <p>{{ result.meaning }}</p>
+                </section>
+
+                <section>
+                    <h3 class="text-white font-medium mb-2 opacity-80">【 谁选择了谁 】</h3>
+                    <p>{{ result.whoChose }}</p>
+                </section>
+
+                <section class="mt-6 border-t border-gray-700 pt-6">
+                    <h3 class="text-white font-medium mb-3 opacity-80 text-lg">【 爱人所在的方位 】</h3>
+                    <p class="italic text-gray-400">{{ result.love }}</p>
+                </section>
+            </div>
+
+            <div class="mt-10 text-center">
+                <button @click="resetTest" class="px-6 py-2 rounded-full border border-gray-600 text-xs text-gray-400 hover:text-white hover:border-white transition-all duration-300 tracking-widest">
+                    重新凝视灵魂
+                </button>
+            </div>
+        </div>
+    </transition>
+</div>
+
+<script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+        setup() {
+            const step = ref('welcome'); // welcome, question, loading, result
+            const currentQuestionIndex = ref(0);
+            const answers = ref([]);
+
+            const questions = [
+                {
+                    id: "源流 (Origin)",
+                    text: "当你凝视无垠星空时，你内心深处最先泛起的涟漪是？",
+                    options: [
+                        { text: "对失落故乡的深深眷恋，仿佛灵魂原本属于那里", value: "C" },
+                        { text: "想要丈量未知、将脚印印在更远处的征服渴望", value: "T" }
+                    ]
+                },
+                {
+                    id: "选择 (Choice)",
+                    text: "回首过往种种，你觉得你的降生是？",
+                    options: [
+                        { text: "被某种宏大的命运之手推入这喧嚣红尘", value: "W" },
+                        { text: "是灵魂在无数平行宇宙中，主动选择了这段旅程", value: "I" }
+                    ]
+                },
+                {
+                    id: "目的 (Purpose)",
+                    text: "当周遭世界陷入混乱与无序，你会本能地选择？",
+                    options: [
+                        { text: "退后一步，静静观察，试图理解这混沌背后的真理", value: "O" },
+                        { text: "投身其中，以自己的意志和双手去重塑规则", value: "R" }
+                    ]
+                },
+                {
+                    id: "归宿 (Destination)",
+                    text: "你如何看待生命最终的消逝？",
+                    options: [
+                        { text: "那是终极的安息，灵魂如水滴般归于无边宁静的虚无", value: "V" },
+                        { text: "那是一扇门，通往另一场截然不同的伟大冒险", value: "B" }
+                    ]
+                }
+            ];
+
+            const result = ref({});
+            const finalCode = ref("");
+
+            const startTest = () => {
+                step.value = 'question';
+                currentQuestionIndex.value = 0;
+                answers.value = [];
+            };
+
+            const answerQuestion = (val) => {
+                answers.value.push(val);
+                if (answers.value.length < questions.length) {
+                    currentQuestionIndex.value++;
+                } else {
+                    generateResult();
+                }
+            };
+
+            const generateResult = () => {
+                step.value = 'loading';
+                
+                setTimeout(() => {
+                    const code = answers.value.join('');
+                    finalCode.value = code;
+                    
+                    const c1 = code[0]; // C or T
+                    const c2 = code[1]; // W or I
+                    const c3 = code[2]; // O or R
+                    const c4 = code[3]; // V or B
+
+                    // Identity
+                    if (c1 === 'C' && c3 === 'O') result.value.identity = "宇宙的守望者";
+                    else if (c1 === 'C' && c3 === 'R') result.value.identity = "星辰的编织者";
+                    else if (c1 === 'T' && c3 === 'O') result.value.identity = "大地的记录者";
+                    else if (c1 === 'T' && c3 === 'R') result.value.identity = "尘世的开创者";
+
+                    // Origin & Destination
+                    let originStr = c1 === 'C' ? "生于璀璨星尘" : "生于厚重黄土";
+                    let destStr = c4 === 'V' ? "死往永恒虚空" : "死往无尽轮回";
+                    result.value.originDest = `${originStr}，${destStr}。`;
+
+                    // Past Life
+                    result.value.past = c1 === 'C' 
+                        ? "你曾是游离于银河边缘的纯粹灵体，在某个高等文明中吟唱着光的诗篇，未曾被物质的沉重所沾染。"
+                        : "你曾是古老地球上最原始文明的祭司或首领，用双手在泥土上刻下人类第一部法典，体验过最原始的血与火。";
+
+                    // Future Life
+                    result.value.future = c4 === 'V'
+                        ? "你将化为宇宙背景辐射中的一抹微光，不再拥有形体，只作为一种绝对的宁静存在于万物之间。"
+                        : "你将降生于一个没有重力的硅基星球，以全新的形态和感知维度，继续探索生命的无限可能。";
+
+                    // Present Life
+                    result.value.present = c2 === 'W'
+                        ? "背负着时代的重量，你的今生是一场注定的修行。在悲欢离合中体验生而为人的厚度，所有的身不由己，都是为了锤炼灵魂的韧性。"
+                        : "带着明确的灵魂蓝图而来，你的今生更像是一场沉浸式体验游戏。所有的磨难，都是你来之前为自己设置的关卡。";
+
+                    // Why Here
+                    result.value.whyHere = c3 === 'O'
+                        ? "为了见证。世界需要一双清澈的眼睛来凝视它的美丽与荒芜，你的存在本身就是一种对世间的悲悯与注视。"
+                        : "为了改变。世界在停滞中呼唤破局者，你的到来是为了推动命运的齿轮，让死水重新流动。";
+
+                    // Meaning to world
+                    result.value.meaning = c1 === 'C'
+                        ? "像是一滴清泉落入干涸的沙漠，你为这个沉重的物质世界带来了轻盈、浪漫与不可多得的灵性。"
+                        : "像是一棵大树扎根于悬崖的岩缝，你为这个漂浮不定的虚无时代注入了坚韧、力量与真实的触感。";
+
+                    // Who chose who
+                    result.value.whoChose = c2 === 'W'
+                        ? "是世界选择了你。在无数个濒临破碎的平行时空里，这个时代向你的灵魂发出了求救的频率，而你听到了。"
+                        : "是你选择了世界。在灵魂的圣殿里，你在一万个星球中唯独指向了这颗蓝色的水球，因为这里有你未竟的体验。";
+
+                    // Love
+                    const loveLocations = [
+                        "TA 在你的【西北方向】。隔着千山万水，可能此刻正和你仰望同一片星空，你们的相遇需要一次长途旅行的契机。",
+                        "TA 在你的【东南方向】。就在繁华都市的某个静谧角落，可能正在某家咖啡馆翻阅旧书，等待那个能听懂灵魂频率的人。",
+                        "TA 在你的【正南方向】。命运的红线已经悄然牵起，TA 正在走向你的路上，你们将在一个阳光明媚的午后不期而遇。",
+                        "TA 在你的【正北方向】。在寒冷中互相取暖的宿命，你们会在某次意外的困境中相识，成为彼此一生的救赎。",
+                        "TA 在你的【正东方向】。如晨曦初现般温柔，TA 就在你日常生活的边缘，可能是一个你经常擦肩而过却未曾留意的人。",
+                        "TA 在你的【正西方向】。如晚霞般绚烂而热烈，TA 将在一个充满艺术气息的场合闯入你的生活，带来翻天覆地的改变。",
+                        "TA 在你的【东北方向】。缘分藏在过去的记忆里，也许是久别重逢的故人，也许是通过老朋友偶然结识的灵魂伴侣。",
+                        "TA 在你的【西南方向】。你们拥有截然不同的背景，却在某个跨界的领域中产生奇妙的共振，TA 正在那个未知的领域等你。"
+                    ];
+                    
+                    // Simple hash based on chars
+                    const index = ((c1==='C'?0:1)*4 + (c2==='W'?0:1)*2 + (c3==='O'?0:1) + (c4==='V'?0:1)) % 8;
+                    result.value.love = loveLocations[index];
+
+                    step.value = 'result';
+                }, 2000);
+            };
+
+            const resetTest = () => {
+                step.value = 'welcome';
+            };
+
+            return {
+                step,
+                questions,
+                currentQuestionIndex,
+                startTest,
+                answerQuestion,
+                result,
+                finalCode,
+                resetTest
+            };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
