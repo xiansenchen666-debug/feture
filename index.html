@@ -309,15 +309,16 @@
         <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-10 rounded-3xl overflow-y-auto max-h-[90vh] custom-scrollbar">
             
             <!-- Header -->
-            <div class="text-center mb-10 border-b border-gold/20 pb-8 relative">
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
-                <p class="font-en text-gold text-xs tracking-[0.5em] mb-4 mt-4 font-semibold">AKASHIC DOSSIER</p>
-                <h1 class="text-3xl md:text-4xl font-semibold mb-4 tracking-widest text-slate-50 drop-shadow-sm">
+            <div class="text-center mb-12 border-b border-gold/20 pb-10 relative">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-64 h-32 bg-gold/5 blur-3xl rounded-full pointer-events-none"></div>
+                <p class="font-en text-gold text-sm tracking-[0.6em] mb-6 mt-6 font-semibold uppercase">AKASHIC DOSSIER</p>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-light drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
                     {{ result.identity.cn }}
                 </h1>
-                <p class="font-en text-slate-400 tracking-[0.2em] text-sm">{{ result.identity.en }}</p>
-                <div class="mt-6 inline-block px-4 py-1 border border-gold/30 rounded-full bg-slate-800/50 shadow-sm">
-                    <p class="font-en text-xs text-gold tracking-[0.4em] font-medium">CODE: {{ finalCode }}</p>
+                <p class="font-en text-slate-300 tracking-[0.3em] text-base font-medium">{{ result.identity.en }}</p>
+                <div class="mt-8 inline-block px-6 py-2 border border-gold/40 rounded-full bg-slate-800/80 shadow-[0_0_15px_rgba(212,175,55,0.15)] backdrop-blur-md">
+                    <p class="font-en text-xs text-gold tracking-[0.5em] font-semibold">CODE: {{ finalCode }}</p>
                 </div>
             </div>
 
@@ -331,14 +332,14 @@
                 <!-- Past & Future Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <section class="glass-card p-6 rounded-2xl relative overflow-hidden border border-gold/20 bg-slate-800/40 hover:bg-slate-800/60 transition-colors shadow-sm hover:shadow-md">
-                        <div class="absolute -right-4 -top-4 text-6xl text-gold/5 font-en font-bold">PAST</div>
+                        <div class="absolute -right-2 -top-2 text-4xl text-gold/5 font-en font-bold">PAST</div>
                         <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1 font-semibold">PREVIOUS INCARNATION</h3>
                         <h4 class="text-slate-100 font-medium mb-4 tracking-widest text-sm border-b border-gold/20 pb-2 inline-block">【 前世羁绊 】</h4>
                         <p class="text-sm text-slate-300 leading-loose">{{ result.past }}</p>
                     </section>
                     
                     <section class="glass-card p-6 rounded-2xl relative overflow-hidden border border-gold/20 bg-slate-800/40 hover:bg-slate-800/60 transition-colors shadow-sm hover:shadow-md">
-                        <div class="absolute -right-4 -top-4 text-6xl text-gold/5 font-en font-bold">NEXT</div>
+                        <div class="absolute -right-2 -top-2 text-4xl text-gold/5 font-en font-bold">NEXT</div>
                         <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1 font-semibold">NEXT INCARNATION</h3>
                         <h4 class="text-slate-100 font-medium mb-4 tracking-widest text-sm border-b border-gold/20 pb-2 inline-block">【 来世归宿 】</h4>
                         <p class="text-sm text-slate-300 leading-loose">{{ result.future }}</p>
