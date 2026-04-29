@@ -151,27 +151,17 @@
     <transition name="fade" mode="out-in">
         
         <!-- ================= INTRO STEP 1: 引言 ================= -->
-        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden border-t border-gold/30">
+        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
             
-            <!-- Author Signature Banner -->
-            <div class="absolute top-0 left-0 w-full bg-gradient-to-r from-transparent via-gold/10 to-transparent border-b border-gold/20 py-2">
-                <div class="flex items-center justify-center gap-4">
-                    <div class="w-12 h-[1px] bg-gold/40"></div>
-                    <span class="font-en text-sm md:text-base text-gold tracking-[0.4em] uppercase font-semibold drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">
-                        CREATED BY <span class="text-slate-50 font-bold ml-2">CARY</span>
-                    </span>
-                    <div class="w-12 h-[1px] bg-gold/40"></div>
-                </div>
-            </div>
-            
-            <div class="mb-8 opacity-80 mt-12">
+            <div class="mb-8 opacity-80 mt-4">
                 <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase font-semibold">Soul Matrix</p>
                 <div class="accent-line"></div>
             </div>
             
-            <h1 class="text-3xl md:text-5xl font-semibold mb-12 tracking-widest text-slate-50 drop-shadow-sm">
+            <h1 class="text-3xl md:text-5xl font-semibold mb-2 tracking-widest text-slate-50 drop-shadow-sm">
                 灵魂坐标定位系统
             </h1>
+            <p class="font-en text-gold/60 text-sm tracking-[0.4em] mb-12 uppercase font-light">A CARY ORIGINAL SYSTEM</p>
             
             <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-slate-300 leading-loose tracking-[0.2em] font-light">
                 <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-sm">
@@ -389,11 +379,17 @@
             </div>
 
             <!-- Footer -->
-            <div class="mt-16 text-center pb-4">
-                <button @click="resetTest" class="font-en text-xs px-8 py-3 rounded-full border border-gold/40 text-slate-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] uppercase bg-white/5 shadow-sm hover:shadow-md font-medium">
-                    Re-align Matrix | 重新凝视
+            <div class="mt-16 text-center pb-4 flex flex-col items-center">
+                <button @click="resetTest" class="group relative px-12 py-4 rounded-full border-2 border-gold text-slate-50 hover:text-slate-900 transition-all duration-500 overflow-hidden bg-gold/10 hover:bg-gold shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] font-semibold text-base md:text-lg w-full max-w-sm">
+                    <span class="relative z-10 flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        重新测算
+                    </span>
+                    <div class="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-0"></div>
                 </button>
-                <p class="text-[10px] text-slate-500 mt-6 font-en tracking-[0.2em]">© 2024 AKASHIC SYSTEM V2.0</p>
+                <p class="text-[10px] text-slate-500 mt-8 font-en tracking-[0.2em] uppercase">© 2024 A CARY ORIGINAL SYSTEM</p>
             </div>
         </div>
     </transition>
