@@ -138,48 +138,51 @@
         
         <!-- ================= INTRO STEP 1: 引言 ================= -->
         <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
-            <div class="mb-6 opacity-80 mt-4">
+            <div class="mb-8 opacity-80 mt-4">
                 <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase">Soul Matrix</p>
                 <div class="accent-line"></div>
             </div>
             
-            <h1 class="text-3xl md:text-5xl font-semibold mb-10 tracking-widest text-white drop-shadow-2xl">
+            <h1 class="text-3xl md:text-5xl font-semibold mb-12 tracking-widest text-white drop-shadow-2xl">
                 灵魂坐标定位系统
             </h1>
             
-            <div class="w-full max-w-xl text-left space-y-6 text-sm md:text-base text-gray-300 leading-loose tracking-wide font-light">
-                <p class="italic text-center text-gray-400 mb-8 tracking-widest text-lg">“我是谁？生从何来，死往何处？”</p>
-                <p>自人类仰望星空起，这些关于生命本质的叩问便从未停止。我们在这个浩瀚的世界里寻觅意义，渴望知道自己的来处与归途。</p>
-                <p>本工具是一款汲取了 MBTI 分类逻辑灵感，但专为探索“人类终极存在主义与灵性状态”而设计的深度测绘系统。我们将晦涩的哲学命题转化为可视化的灵魂坐标，带你开启一场向内深潜的觉醒之旅。</p>
+            <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-gray-300 leading-loose tracking-[0.2em] font-light">
+                <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-lg">
+                    “我是谁？”<br>
+                    “生从何来，死往何处？”
+                </p>
+                <p>自仰望星空起，</p>
+                <p>人类的叩问从未停止。</p>
+                <p class="text-gray-400 text-sm mt-8">将晦涩的哲学命题转化为可视化的坐标，<br>带你开启向内深潜的觉醒之旅。</p>
             </div>
             
-            <button @click="step = 'intro2'" class="mt-12 group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                <span class="relative z-10">继续探索 <span class="font-en text-xs ml-2">→</span></span>
+            <button @click="step = 'intro2'" class="mt-16 group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
+                <span class="relative z-10">凝视深渊 <span class="font-en text-xs ml-2">→</span></span>
                 <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
             </button>
         </div>
 
         <!-- ================= INTRO STEP 2: 维度 1 & 2 ================= -->
         <div v-else-if="step === 'intro2'" key="intro2" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
-            <h2 class="text-xl md:text-2xl text-gold tracking-widest font-medium mb-8 border-b border-gold/20 pb-4">【 你将在这里探索什么？ 】</h2>
-            <p class="text-gray-400 mb-10 tracking-widest">通过本系统的核心维度，你将解锁专属“灵魂档案”：</p>
+            <h2 class="text-xl md:text-2xl text-gold tracking-widest font-medium mb-12 border-b border-gold/20 pb-4">【 解锁灵魂档案 】</h2>
             
-            <div class="w-full max-w-xl text-left space-y-10 text-sm md:text-base text-gray-300 leading-loose tracking-wide font-light">
-                <div class="pl-5 border-l-2 border-gold/40">
-                    <h3 class="text-white font-medium mb-3 tracking-widest text-lg">时空与轮回 <span class="font-en text-gold/60 text-xs ml-2">Origin & Destiny</span></h3>
-                    <p class="text-gray-400">解码你灵魂的生命周期。探寻你“生从何来，死往何处”，并描绘你的前世印记、今世形态以及下一世的可能归宿。</p>
+            <div class="w-full max-w-md text-left space-y-12 text-gray-300 font-light">
+                <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
+                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">时空与轮回 <span class="font-en text-gold/60 text-xs ml-3">ORIGIN & DESTINY</span></h3>
+                    <p class="text-gray-400 tracking-widest leading-loose">解码生命周期。<br><span class="text-gray-300">寻觅前世印记，定位来世归宿。</span></p>
                 </div>
                 
-                <div class="pl-5 border-l-2 border-gold/40">
-                    <h3 class="text-white font-medium mb-3 tracking-widest text-lg">身份与意义 <span class="font-en text-gold/60 text-xs ml-2">Identity & Purpose</span></h3>
-                    <p class="text-gray-400">解答“我是谁”以及“为什么要出现在这个世界”。揭示你的存在对这个宇宙而言，究竟是一场破局、一次见证，还是某种不可或缺的拼图。</p>
+                <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
+                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">身份与意义 <span class="font-en text-gold/60 text-xs ml-3">IDENTITY & PURPOSE</span></h3>
+                    <p class="text-gray-400 tracking-widest leading-loose">解答“我是谁”。<br><span class="text-gray-300">一场破局，一次见证，或不可或缺的拼图。</span></p>
                 </div>
             </div>
             
-            <div class="mt-12 flex space-x-6 items-center">
-                <button @click="step = 'intro1'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 返回</button>
+            <div class="mt-16 flex space-x-8 items-center">
+                <button @click="step = 'intro1'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 归位</button>
                 <button @click="step = 'intro3'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                    <span class="relative z-10">继续探索 <span class="font-en text-xs ml-2">→</span></span>
+                    <span class="relative z-10">继续下潜 <span class="font-en text-xs ml-2">→</span></span>
                     <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
@@ -189,22 +192,22 @@
         <div v-else-if="step === 'intro3'" key="intro3" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
             <h2 class="text-xl md:text-2xl text-gold tracking-widest font-medium mb-12 border-b border-gold/20 pb-4">【 深度羁绊解码 】</h2>
             
-            <div class="w-full max-w-xl text-left space-y-10 text-sm md:text-base text-gray-300 leading-loose tracking-wide font-light">
-                <div class="pl-5 border-l-2 border-gold/40">
-                    <h3 class="text-white font-medium mb-3 tracking-widest text-lg">意志与契约 <span class="font-en text-gold/60 text-xs ml-2">Will & Agency</span></h3>
-                    <p class="text-gray-400">剖析你与这颗星球的底层羁绊——探究究竟是宏大的命运“选择”了你，还是你带着强烈的意志力主动“选择”了降生于此。</p>
+            <div class="w-full max-w-md text-left space-y-12 text-gray-300 font-light">
+                <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
+                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">意志与契约 <span class="font-en text-gold/60 text-xs ml-3">WILL & AGENCY</span></h3>
+                    <p class="text-gray-400 tracking-widest leading-loose">剖析底层羁绊。<br><span class="text-gray-300">是命运选中了你，还是你选择了降生？</span></p>
                 </div>
                 
-                <div class="pl-5 border-l-2 border-gold/40">
-                    <h3 class="text-white font-medium mb-3 tracking-widest text-lg">宿命与羁绊 <span class="font-en text-gold/60 text-xs ml-2">Love & Compass</span></h3>
-                    <p class="text-gray-400">开启你的灵魂伴侣雷达。通过潜意识的投射，指引你命中注定的爱人正处于何种生命状态、身在何方，以及你们相遇的灵性方位。</p>
+                <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
+                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">宿命与羁绊 <span class="font-en text-gold/60 text-xs ml-3">LOVE & COMPASS</span></h3>
+                    <p class="text-gray-400 tracking-widest leading-loose">开启伴侣雷达。<br><span class="text-gray-300">指引命中注定之人，锁定相遇方位。</span></p>
                 </div>
             </div>
             
-            <div class="mt-12 flex space-x-6 items-center">
-                <button @click="step = 'intro2'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 返回</button>
+            <div class="mt-16 flex space-x-8 items-center">
+                <button @click="step = 'intro2'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 上浮</button>
                 <button @click="step = 'intro4'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                    <span class="relative z-10">继续探索 <span class="font-en text-xs ml-2">→</span></span>
+                    <span class="relative z-10">触及核心 <span class="font-en text-xs ml-2">→</span></span>
                     <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
@@ -212,26 +215,26 @@
 
         <!-- ================= INTRO STEP 4: 结语 ================= -->
         <div v-else-if="step === 'intro4'" key="intro4" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
-            <div class="mb-8 opacity-80">
+            <div class="mb-10 opacity-80">
                 <div class="accent-line mb-6"></div>
             </div>
             
-            <p class="text-lg md:text-xl text-gray-300 tracking-[0.2em] leading-loose font-light mb-12">
-                这不仅仅是一场心理测试，<br>
-                更是一次与宇宙的深度对话。<br><br>
-                <span class="text-gold text-xl md:text-2xl font-medium mt-4 block leading-relaxed drop-shadow-lg">
-                    在这里，褪去尘世的标签，<br>
-                    定位你的绝对坐标，<br>
+            <p class="text-lg md:text-xl text-gray-300 tracking-[0.3em] leading-[2.5] font-light mb-16">
+                这不是测试，<br>
+                是一次与宇宙的对话。<br><br>
+                <span class="text-gold text-2xl md:text-3xl font-medium mt-6 block drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                    褪去尘世标签，<br>
+                    定位绝对坐标，<br>
                     看见最真实的自己。
                 </span>
             </p>
             
-            <div class="mt-4 flex flex-col items-center space-y-6">
-                <button @click="startTest" class="group relative px-12 py-4 rounded-full border border-gold text-gold hover:text-white hover:border-white transition-all duration-700 tracking-[0.3em] overflow-hidden bg-gold/10">
-                    <span class="relative z-10 font-en text-xs uppercase mr-2 opacity-80">INITIATE</span> 开启深潜之旅
+            <div class="mt-8 flex flex-col items-center space-y-8">
+                <button @click="startTest" class="group relative px-12 py-5 rounded-full border border-gold text-gold hover:text-white hover:border-white transition-all duration-700 tracking-[0.4em] overflow-hidden bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]">
+                    <span class="relative z-10 font-en text-sm uppercase mr-2 opacity-90">INITIATE</span> 开启深潜之旅
                     <div class="absolute inset-0 bg-gold/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
-                <button @click="step = 'intro3'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 返回</button>
+                <button @click="step = 'intro3'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 返回维度</button>
             </div>
         </div>
 
