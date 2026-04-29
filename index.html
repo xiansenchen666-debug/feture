@@ -11,14 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-light: #F3E5AB;
-            --dark-bg: #030305;
+            --gold: #C5A059;
+            --gold-light: #E8D5B5;
+            --dark-bg: #F9F7F1;
+            --text-main: #2C2C2C;
+            --text-muted: #6B6B6B;
         }
         body {
             font-family: 'Noto Serif SC', serif;
             background-color: var(--dark-bg);
-            color: #e5e7eb;
+            color: var(--text-main);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             margin: 0;
@@ -37,30 +39,33 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
+            opacity: 0.6;
         }
         /* Premium Glassmorphism */
         .glass-panel {
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 0 20px rgba(197, 160, 89, 0.05);
         }
         .glass-card {
-            background: rgba(20, 20, 25, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(197, 160, 89, 0.15);
             transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
         .glass-card:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            background: rgba(30, 30, 40, 0.6);
+            border-color: rgba(197, 160, 89, 0.4);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 25px rgba(197, 160, 89, 0.08);
         }
         /* Typography Highlights */
         .text-gold {
             color: var(--gold);
         }
         .border-gold {
-            border-color: rgba(212, 175, 55, 0.3);
+            border-color: rgba(197, 160, 89, 0.3);
         }
         .accent-line {
             width: 1px;
@@ -85,6 +90,9 @@
             position: relative;
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            color: var(--text-main);
         }
         .option-btn::before {
             content: '';
@@ -93,8 +101,13 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
             transition: left 0.5s ease;
+        }
+        .option-btn:hover {
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.1);
         }
         .option-btn:active::before {
             left: 100%;
@@ -105,17 +118,17 @@
             width: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.02);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.3);
+            background: rgba(197, 160, 89, 0.3);
             border-radius: 4px;
         }
         
         /* Glitch Text for Loading */
         .glitch {
             position: relative;
-            color: white;
+            color: var(--text-main);
             animation: glitch-skew 1s infinite linear alternate-reverse;
         }
         @keyframes glitch-skew {
@@ -139,26 +152,26 @@
         <!-- ================= INTRO STEP 1: 引言 ================= -->
         <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
             <div class="mb-8 opacity-80 mt-4">
-                <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase">Soul Matrix</p>
+                <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase font-semibold">Soul Matrix</p>
                 <div class="accent-line"></div>
             </div>
             
-            <h1 class="text-3xl md:text-5xl font-semibold mb-12 tracking-widest text-white drop-shadow-2xl">
+            <h1 class="text-3xl md:text-5xl font-semibold mb-12 tracking-widest text-gray-900 drop-shadow-sm">
                 灵魂坐标定位系统
             </h1>
             
-            <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-gray-300 leading-loose tracking-[0.2em] font-light">
-                <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-lg">
+            <div class="w-full max-w-lg space-y-8 text-base md:text-lg text-gray-600 leading-loose tracking-[0.2em] font-light">
+                <p class="italic text-gold mb-6 text-xl md:text-2xl drop-shadow-sm">
                     “我是谁？”<br>
                     “生从何来，死往何处？”
                 </p>
                 <p>自仰望星空起，</p>
                 <p>人类的叩问从未停止。</p>
-                <p class="text-gray-400 text-sm mt-8">将晦涩的哲学命题转化为可视化的坐标，<br>带你开启向内深潜的觉醒之旅。</p>
+                <p class="text-gray-500 text-sm mt-8">将晦涩的哲学命题转化为可视化的坐标，<br>带你开启向内深潜的觉醒之旅。</p>
             </div>
             
-            <button @click="step = 'intro2'" class="mt-16 group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                <span class="relative z-10">凝视深渊 <span class="font-en text-xs ml-2">→</span></span>
+            <button @click="step = 'intro2'" class="mt-16 group relative px-10 py-3 rounded-full border border-gold/40 text-gray-600 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-white/50 shadow-sm hover:shadow-md">
+                <span class="relative z-10 font-medium">凝视深渊 <span class="font-en text-xs ml-2">→</span></span>
                 <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
             </button>
         </div>
@@ -167,22 +180,22 @@
         <div v-else-if="step === 'intro2'" key="intro2" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
             <h2 class="text-xl md:text-2xl text-gold tracking-widest font-medium mb-12 border-b border-gold/20 pb-4">【 解锁灵魂档案 】</h2>
             
-            <div class="w-full max-w-md text-left space-y-12 text-gray-300 font-light">
+            <div class="w-full max-w-md text-left space-y-12 text-gray-600 font-light">
                 <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
-                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">时空与轮回 <span class="font-en text-gold/60 text-xs ml-3">ORIGIN & DESTINY</span></h3>
-                    <p class="text-gray-400 tracking-widest leading-loose">解码生命周期。<br><span class="text-gray-300">寻觅前世印记，定位来世归宿。</span></p>
+                    <h3 class="text-gray-800 font-medium mb-4 tracking-widest text-xl">时空与轮回 <span class="font-en text-gold/80 text-xs ml-3">ORIGIN & DESTINY</span></h3>
+                    <p class="text-gray-500 tracking-widest leading-loose">解码生命周期。<br><span class="text-gray-600">寻觅前世印记，定位来世归宿。</span></p>
                 </div>
                 
                 <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
-                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">身份与意义 <span class="font-en text-gold/60 text-xs ml-3">IDENTITY & PURPOSE</span></h3>
-                    <p class="text-gray-400 tracking-widest leading-loose">解答“我是谁”。<br><span class="text-gray-300">一场破局，一次见证，或不可或缺的拼图。</span></p>
+                    <h3 class="text-gray-800 font-medium mb-4 tracking-widest text-xl">身份与意义 <span class="font-en text-gold/80 text-xs ml-3">IDENTITY & PURPOSE</span></h3>
+                    <p class="text-gray-500 tracking-widest leading-loose">解答“我是谁”。<br><span class="text-gray-600">一场破局，一次见证，或不可或缺的拼图。</span></p>
                 </div>
             </div>
             
             <div class="mt-16 flex space-x-8 items-center">
-                <button @click="step = 'intro1'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 归位</button>
-                <button @click="step = 'intro3'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                    <span class="relative z-10">继续下潜 <span class="font-en text-xs ml-2">→</span></span>
+                <button @click="step = 'intro1'" class="text-gray-400 hover:text-gray-800 transition-colors tracking-widest text-sm font-medium">← 归位</button>
+                <button @click="step = 'intro3'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-600 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-white/50 shadow-sm hover:shadow-md">
+                    <span class="relative z-10 font-medium">继续下潜 <span class="font-en text-xs ml-2">→</span></span>
                     <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
@@ -192,22 +205,22 @@
         <div v-else-if="step === 'intro3'" key="intro3" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl">
             <h2 class="text-xl md:text-2xl text-gold tracking-widest font-medium mb-12 border-b border-gold/20 pb-4">【 深度羁绊解码 】</h2>
             
-            <div class="w-full max-w-md text-left space-y-12 text-gray-300 font-light">
+            <div class="w-full max-w-md text-left space-y-12 text-gray-600 font-light">
                 <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
-                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">意志与契约 <span class="font-en text-gold/60 text-xs ml-3">WILL & AGENCY</span></h3>
-                    <p class="text-gray-400 tracking-widest leading-loose">剖析底层羁绊。<br><span class="text-gray-300">是命运选中了你，还是你选择了降生？</span></p>
+                    <h3 class="text-gray-800 font-medium mb-4 tracking-widest text-xl">意志与契约 <span class="font-en text-gold/80 text-xs ml-3">WILL & AGENCY</span></h3>
+                    <p class="text-gray-500 tracking-widest leading-loose">剖析底层羁绊。<br><span class="text-gray-600">是命运选中了你，还是你选择了降生？</span></p>
                 </div>
                 
                 <div class="pl-6 border-l-4 border-gold/40 hover:border-gold transition-colors duration-500">
-                    <h3 class="text-white font-medium mb-4 tracking-widest text-xl">宿命与羁绊 <span class="font-en text-gold/60 text-xs ml-3">LOVE & COMPASS</span></h3>
-                    <p class="text-gray-400 tracking-widest leading-loose">开启伴侣雷达。<br><span class="text-gray-300">指引命中注定之人，锁定相遇方位。</span></p>
+                    <h3 class="text-gray-800 font-medium mb-4 tracking-widest text-xl">宿命与羁绊 <span class="font-en text-gold/80 text-xs ml-3">LOVE & COMPASS</span></h3>
+                    <p class="text-gray-500 tracking-widest leading-loose">开启伴侣雷达。<br><span class="text-gray-600">指引命中注定之人，锁定相遇方位。</span></p>
                 </div>
             </div>
             
             <div class="mt-16 flex space-x-8 items-center">
-                <button @click="step = 'intro2'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 上浮</button>
-                <button @click="step = 'intro4'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-black/30">
-                    <span class="relative z-10">触及核心 <span class="font-en text-xs ml-2">→</span></span>
+                <button @click="step = 'intro2'" class="text-gray-400 hover:text-gray-800 transition-colors tracking-widest text-sm font-medium">← 上浮</button>
+                <button @click="step = 'intro4'" class="group relative px-10 py-3 rounded-full border border-gold/40 text-gray-600 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] overflow-hidden bg-white/50 shadow-sm hover:shadow-md">
+                    <span class="relative z-10 font-medium">触及核心 <span class="font-en text-xs ml-2">→</span></span>
                     <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
@@ -219,10 +232,10 @@
                 <div class="accent-line mb-6"></div>
             </div>
             
-            <p class="text-lg md:text-xl text-gray-300 tracking-[0.3em] leading-[2.5] font-light mb-16">
+            <p class="text-lg md:text-xl text-gray-600 tracking-[0.3em] leading-[2.5] font-light mb-16">
                 这不是测试，<br>
                 是一次与宇宙的对话。<br><br>
-                <span class="text-gold text-2xl md:text-3xl font-medium mt-6 block drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                <span class="text-gold text-2xl md:text-3xl font-medium mt-6 block drop-shadow-sm">
                     褪去尘世标签，<br>
                     定位绝对坐标，<br>
                     看见最真实的自己。
@@ -230,11 +243,11 @@
             </p>
             
             <div class="mt-8 flex flex-col items-center space-y-8">
-                <button @click="startTest" class="group relative px-12 py-5 rounded-full border border-gold text-gold hover:text-white hover:border-white transition-all duration-700 tracking-[0.4em] overflow-hidden bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]">
-                    <span class="relative z-10 font-en text-sm uppercase mr-2 opacity-90">INITIATE</span> 开启深潜之旅
-                    <div class="absolute inset-0 bg-gold/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                <button @click="startTest" class="group relative px-12 py-5 rounded-full border border-gold text-gold hover:text-white hover:border-gold transition-all duration-700 tracking-[0.4em] overflow-hidden bg-white/80 shadow-[0_0_20px_rgba(197,160,89,0.2)] hover:shadow-[0_0_30px_rgba(197,160,89,0.4)]">
+                    <span class="relative z-10 font-en text-sm uppercase mr-2 font-semibold">INITIATE</span> <span class="relative z-10 font-medium">开启深潜之旅</span>
+                    <div class="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
-                <button @click="step = 'intro3'" class="text-gray-500 hover:text-white transition-colors tracking-widest text-sm">← 返回维度</button>
+                <button @click="step = 'intro3'" class="text-gray-400 hover:text-gray-800 transition-colors tracking-widest text-sm font-medium">← 返回维度</button>
             </div>
         </div>
 
@@ -243,37 +256,37 @@
             <!-- 进度指示器 -->
             <div class="w-full mb-10">
                 <div class="flex justify-between items-center mb-3 px-1">
-                    <span class="text-[10px] text-gray-500 font-en tracking-widest uppercase">PHASE {{ currentQuestionIndex + 1 }}</span>
-                    <span class="text-[10px] text-gold font-en tracking-widest">{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+                    <span class="text-sm text-gray-500 font-en tracking-widest uppercase">PHASE {{ currentQuestionIndex + 1 }}</span>
+                    <span class="text-base text-gold font-en tracking-widest font-semibold">{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
                 </div>
-                <div class="w-full h-[3px] bg-gray-800/60 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-gold/40 to-gold transition-all duration-500 ease-out shadow-[0_0_10px_rgba(212,175,55,0.5)]" :style="{ width: ((currentQuestionIndex + 1) / questions.length) * 100 + '%' }"></div>
+                <div class="w-full h-[4px] bg-gray-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-gold-light to-gold transition-all duration-500 ease-out shadow-[0_0_10px_rgba(197,160,89,0.5)]" :style="{ width: ((currentQuestionIndex + 1) / questions.length) * 100 + '%' }"></div>
                 </div>
             </div>
 
             <div class="mb-10 flex flex-col items-center justify-center relative">
-                <p class="font-en text-gold text-xs tracking-[0.4em] mb-2 uppercase">{{ questions[currentQuestionIndex].en }}</p>
-                <h3 class="text-sm text-gray-500 tracking-[0.3em] mb-4">{{ questions[currentQuestionIndex].id }}</h3>
+                <p class="font-en text-gold text-sm tracking-[0.4em] mb-2 uppercase">{{ questions[currentQuestionIndex].en }}</p>
+                <h3 class="text-base text-gray-500 tracking-[0.3em] mb-4">{{ questions[currentQuestionIndex].id }}</h3>
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
             </div>
-            
-            <h2 class="text-xl md:text-2xl font-medium mb-12 leading-relaxed tracking-widest text-center text-gray-100">
+
+            <h2 class="text-xl md:text-2xl font-medium mb-12 leading-relaxed tracking-widest text-center text-gray-800">
                 {{ questions[currentQuestionIndex].text }}
             </h2>
 
             <div class="space-y-6">
                 <button v-for="(opt, idx) in questions[currentQuestionIndex].options" :key="idx" 
                         @click="answerQuestion(opt.value)"
-                        class="option-btn w-full text-left p-6 rounded-2xl border border-gray-800 bg-black/40 text-sm md:text-base leading-relaxed tracking-wide hover:border-gold/50 hover:bg-black/60 text-gray-300 hover:text-white">
-                    <span class="font-en text-gold/50 mr-3 text-xs">{{ String.fromCharCode(65 + idx) }}.</span> 
+                        class="option-btn w-full text-left p-6 rounded-2xl border border-gray-200 bg-white/40 text-sm md:text-base leading-relaxed tracking-wide hover:border-gold/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 shadow-sm hover:shadow-md">
+                    <span class="font-en text-gold mr-3 text-sm font-semibold">{{ String.fromCharCode(65 + idx) }}.</span> 
                     {{ opt.text }}
                 </button>
             </div>
             
-            <div class="mt-12 flex justify-center space-x-2">
+            <div class="mt-12 flex justify-center space-x-3">
                 <div v-for="n in questions.length" :key="n" 
-                     class="w-2 h-2 rounded-full transition-all duration-500"
-                     :class="n - 1 === currentQuestionIndex ? 'bg-gold scale-125 shadow-[0_0_10px_rgba(212,175,55,0.8)]' : 'bg-gray-700'">
+                     class="w-2.5 h-2.5 rounded-full transition-all duration-500"
+                     :class="n - 1 === currentQuestionIndex ? 'bg-gold scale-125 shadow-[0_0_10px_rgba(197,160,89,0.6)]' : 'bg-gray-300'">
                 </div>
             </div>
         </div>
@@ -282,93 +295,93 @@
         <div v-else-if="step === 'loading'" key="loading" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-3xl">
             <div class="relative w-24 h-24 mb-8 flex items-center justify-center">
                 <div class="absolute inset-0 border-t-2 border-gold rounded-full animate-[spin_2s_linear_infinite]"></div>
-                <div class="absolute inset-2 border-r-2 border-white/30 rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
+                <div class="absolute inset-2 border-r-2 border-gray-300 rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
                 <div class="absolute inset-4 border-b-2 border-gold/50 rounded-full animate-[spin_1.5s_linear_infinite]"></div>
-                <div class="font-en text-xs text-gold tracking-widest">{{ loadingProgress }}%</div>
+                <div class="font-en text-sm text-gold tracking-widest font-medium">{{ loadingProgress }}%</div>
             </div>
-            <p class="font-en text-gray-500 tracking-[0.3em] text-xs mb-2">DECRYPTING SOUL MATRIX</p>
-            <p class="text-gray-300 tracking-widest glitch">{{ loadingText }}</p>
-            <p class="font-en text-gold/40 text-[10px] mt-4 tracking-widest">{{ hexStream }}</p>
+            <p class="font-en text-gray-500 tracking-[0.3em] text-xs mb-2 font-semibold">DECRYPTING SOUL MATRIX</p>
+            <p class="text-gray-700 tracking-widest glitch text-sm">{{ loadingText }}</p>
+            <p class="font-en text-gold/60 text-xs mt-4 tracking-widest">{{ hexStream }}</p>
         </div>
 
         <!-- ================= RESULT ================= -->
-        <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-10 rounded-3xl overflow-y-auto max-h-[90vh]">
+        <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-10 rounded-3xl overflow-y-auto max-h-[90vh] custom-scrollbar">
             
             <!-- Header -->
             <div class="text-center mb-10 border-b border-gold/20 pb-8 relative">
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
-                <p class="font-en text-gold text-xs tracking-[0.5em] mb-4 mt-4">AKASHIC DOSSIER</p>
-                <h1 class="text-3xl md:text-4xl font-semibold mb-4 tracking-widest text-white">
+                <p class="font-en text-gold text-xs tracking-[0.5em] mb-4 mt-4 font-semibold">AKASHIC DOSSIER</p>
+                <h1 class="text-3xl md:text-4xl font-semibold mb-4 tracking-widest text-gray-900 drop-shadow-sm">
                     {{ result.identity.cn }}
                 </h1>
-                <p class="font-en text-gray-400 tracking-[0.2em] text-sm">{{ result.identity.en }}</p>
-                <div class="mt-6 inline-block px-4 py-1 border border-gold/30 rounded-full bg-gold/5">
-                    <p class="font-en text-xs text-gold tracking-[0.4em]">CODE: {{ finalCode }}</p>
+                <p class="font-en text-gray-500 tracking-[0.2em] text-sm">{{ result.identity.en }}</p>
+                <div class="mt-6 inline-block px-4 py-1 border border-gold/30 rounded-full bg-white/50 shadow-sm">
+                    <p class="font-en text-xs text-gold tracking-[0.4em] font-medium">CODE: {{ finalCode }}</p>
                 </div>
             </div>
 
-            <div class="space-y-8 text-sm md:text-base text-gray-300 leading-relaxed tracking-wide font-light">
+            <div class="space-y-8 text-sm md:text-base text-gray-700 leading-relaxed tracking-wide font-light">
                 
                 <!-- Origin & Dest -->
-                <div class="text-center italic text-gray-400 mb-8 px-4">
+                <div class="text-center italic text-gray-500 mb-8 px-4 text-lg">
                     " {{ result.originDest }} "
                 </div>
 
                 <!-- Past & Future Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 text-6xl opacity-5 font-en">PAST</div>
-                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1">PREVIOUS INCARNATION</h3>
-                        <h4 class="text-white font-medium mb-4 tracking-widest text-sm border-b border-gray-700 pb-2 inline-block">【 前世羁绊 】</h4>
-                        <p class="text-sm text-gray-400 leading-loose">{{ result.past }}</p>
+                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden border border-gold/20 bg-white/40 hover:bg-white/60 transition-colors shadow-sm hover:shadow-md">
+                        <div class="absolute -right-4 -top-4 text-6xl text-gold/5 font-en font-bold">PAST</div>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1 font-semibold">PREVIOUS INCARNATION</h3>
+                        <h4 class="text-gray-800 font-medium mb-4 tracking-widest text-sm border-b border-gold/20 pb-2 inline-block">【 前世羁绊 】</h4>
+                        <p class="text-sm text-gray-600 leading-loose">{{ result.past }}</p>
                     </section>
                     
-                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 text-6xl opacity-5 font-en">NEXT</div>
-                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1">NEXT INCARNATION</h3>
-                        <h4 class="text-white font-medium mb-4 tracking-widest text-sm border-b border-gray-700 pb-2 inline-block">【 来世归宿 】</h4>
-                        <p class="text-sm text-gray-400 leading-loose">{{ result.future }}</p>
+                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden border border-gold/20 bg-white/40 hover:bg-white/60 transition-colors shadow-sm hover:shadow-md">
+                        <div class="absolute -right-4 -top-4 text-6xl text-gold/5 font-en font-bold">NEXT</div>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1 font-semibold">NEXT INCARNATION</h3>
+                        <h4 class="text-gray-800 font-medium mb-4 tracking-widest text-sm border-b border-gold/20 pb-2 inline-block">【 来世归宿 】</h4>
+                        <p class="text-sm text-gray-600 leading-loose">{{ result.future }}</p>
                     </section>
                 </div>
 
                 <!-- Present Life -->
-                <section class="glass-card p-6 rounded-2xl">
-                    <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
-                        <h4 class="text-white font-medium tracking-widest text-sm">【 今生宿命 】</h4>
-                        <h3 class="font-en text-gold text-xs tracking-[0.3em]">CURRENT LIFE</h3>
+                <section class="glass-card p-6 rounded-2xl border border-gold/20 bg-white/40 hover:bg-white/60 transition-colors shadow-sm hover:shadow-md">
+                    <div class="flex items-center justify-between mb-4 border-b border-gold/20 pb-2">
+                        <h4 class="text-gray-800 font-medium tracking-widest text-sm">【 今生宿命 】</h4>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] font-semibold">CURRENT LIFE</h3>
                     </div>
-                    <p class="text-gray-400 leading-loose">{{ result.present }}</p>
+                    <p class="text-gray-600 leading-loose">{{ result.present }}</p>
                 </section>
 
                 <!-- Purpose & Meaning -->
-                <section class="glass-card p-6 rounded-2xl">
-                    <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
-                        <h4 class="text-white font-medium tracking-widest text-sm">【 降生意义 】</h4>
-                        <h3 class="font-en text-gold text-xs tracking-[0.3em]">EXISTENTIAL PURPOSE</h3>
+                <section class="glass-card p-6 rounded-2xl border border-gold/20 bg-white/40 hover:bg-white/60 transition-colors shadow-sm hover:shadow-md">
+                    <div class="flex items-center justify-between mb-4 border-b border-gold/20 pb-2">
+                        <h4 class="text-gray-800 font-medium tracking-widest text-sm">【 降生意义 】</h4>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] font-semibold">EXISTENTIAL PURPOSE</h3>
                     </div>
                     <div class="space-y-4">
-                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">为何而来：</span>{{ result.whyHere }}</p>
-                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">世界回响：</span>{{ result.meaning }}</p>
-                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">灵魂契约：</span>{{ result.whoChose }}</p>
+                        <p class="text-gray-600 leading-loose"><span class="text-gold font-medium">为何而来：</span>{{ result.whyHere }}</p>
+                        <p class="text-gray-600 leading-loose"><span class="text-gold font-medium">世界回响：</span>{{ result.meaning }}</p>
+                        <p class="text-gray-600 leading-loose"><span class="text-gold font-medium">灵魂契约：</span>{{ result.whoChose }}</p>
                     </div>
                 </section>
 
                 <!-- Love -->
-                <section class="relative mt-12 p-8 border border-gold/30 rounded-2xl bg-gradient-to-b from-gold/5 to-transparent text-center">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#030305] px-4 font-en text-gold text-xs tracking-[0.4em] whitespace-nowrap z-10">
+                <section class="relative mt-12 p-8 border border-gold/40 rounded-2xl bg-gradient-to-b from-gold/10 to-white/50 text-center shadow-md">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F9F7F1] px-4 font-en text-gold text-xs tracking-[0.4em] whitespace-nowrap z-10 font-semibold border border-gold/20 rounded-full py-1">
                         SOULMATE COMPASS
                     </div>
-                    <h4 class="text-white font-medium mb-6 tracking-widest text-lg mt-2">【 爱人所在的方位 】</h4>
-                    <p class="text-gray-300 leading-loose tracking-widest text-justify md:text-center">{{ result.love }}</p>
+                    <h4 class="text-gray-900 font-medium mb-6 tracking-widest text-lg mt-4 drop-shadow-sm">【 爱人所在的方位 】</h4>
+                    <p class="text-gray-700 leading-loose tracking-widest text-justify md:text-center text-base md:text-lg font-medium">{{ result.love }}</p>
                 </section>
             </div>
 
             <!-- Footer -->
             <div class="mt-16 text-center pb-4">
-                <button @click="resetTest" class="font-en text-xs px-8 py-3 rounded-full border border-gray-700 text-gray-500 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] uppercase bg-black/50">
+                <button @click="resetTest" class="font-en text-xs px-8 py-3 rounded-full border border-gold/40 text-gray-600 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] uppercase bg-white/50 shadow-sm hover:shadow-md font-medium">
                     Re-align Matrix | 重新凝视
                 </button>
-                <p class="text-[10px] text-gray-700 mt-6 font-en tracking-[0.2em]">© 2024 AKASHIC SYSTEM V2.0</p>
+                <p class="text-[10px] text-gray-400 mt-6 font-en tracking-[0.2em]">© 2024 AKASHIC SYSTEM V2.0</p>
             </div>
         </div>
     </transition>
@@ -405,7 +418,7 @@
                 if (this.y > height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(197, 160, 89, ${this.opacity})`; // Gold particles
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -428,8 +441,8 @@
             
             // Draw subtle nebula gradient
             let gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-            gradient.addColorStop(0, 'rgba(20, 20, 35, 0.4)');
-            gradient.addColorStop(1, 'rgba(3, 3, 5, 1)');
+            gradient.addColorStop(0, 'rgba(249, 247, 241, 0.8)'); // 亮色背景星云
+            gradient.addColorStop(1, 'rgba(235, 230, 220, 1)');   // 亮色背景边缘
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
 
