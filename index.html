@@ -240,7 +240,18 @@
 
         <!-- ================= QUESTION ================= -->
         <div v-else-if="step === 'question'" :key="'q'+currentQuestionIndex" class="flex flex-col justify-center flex-1 glass-panel p-8 md:p-12 rounded-3xl">
-            <div class="mb-12 flex flex-col items-center justify-center">
+            <!-- 进度指示器 -->
+            <div class="w-full mb-10">
+                <div class="flex justify-between items-center mb-3 px-1">
+                    <span class="text-[10px] text-gray-500 font-en tracking-widest uppercase">PHASE {{ currentQuestionIndex + 1 }}</span>
+                    <span class="text-[10px] text-gold font-en tracking-widest">{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+                </div>
+                <div class="w-full h-[3px] bg-gray-800/60 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-gold/40 to-gold transition-all duration-500 ease-out shadow-[0_0_10px_rgba(212,175,55,0.5)]" :style="{ width: ((currentQuestionIndex + 1) / questions.length) * 100 + '%' }"></div>
+                </div>
+            </div>
+
+            <div class="mb-10 flex flex-col items-center justify-center relative">
                 <p class="font-en text-gold text-xs tracking-[0.4em] mb-2 uppercase">{{ questions[currentQuestionIndex].en }}</p>
                 <h3 class="text-sm text-gray-500 tracking-[0.3em] mb-4">{{ questions[currentQuestionIndex].id }}</h3>
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
@@ -344,11 +355,11 @@
 
                 <!-- Love -->
                 <section class="relative mt-12 p-8 border border-gold/30 rounded-2xl bg-gradient-to-b from-gold/5 to-transparent text-center">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-dark-bg px-4 font-en text-gold text-xs tracking-[0.4em]">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#030305] px-4 font-en text-gold text-xs tracking-[0.4em] whitespace-nowrap z-10">
                         SOULMATE COMPASS
                     </div>
-                    <h4 class="text-white font-medium mb-6 tracking-widest text-lg">【 爱人所在的方位 】</h4>
-                    <p class="text-gray-300 leading-loose tracking-widest">{{ result.love }}</p>
+                    <h4 class="text-white font-medium mb-6 tracking-widest text-lg mt-2">【 爱人所在的方位 】</h4>
+                    <p class="text-gray-300 leading-loose tracking-widest text-justify md:text-center">{{ result.love }}</p>
                 </section>
             </div>
 
@@ -540,16 +551,50 @@
                 "是你用极大的勇气，从无尽的可能中截取了这一种可能。世界不过是你灵魂演练场的沙盘，你才是那个执子之人。"
             ]
         },
-        love: [
-            "TA 在你的【西北方向】。隔着千山万水，可能此刻正和你仰望同一片星空。你们的相遇需要一次长途旅行的契机，或者一场勇敢的出走。",
-            "TA 在你的【东南方向】。就在繁华都市的某个静谧角落，可能正在某家咖啡馆翻阅旧书，等待那个能听懂灵魂频率的人。请留意下雨天的屋檐。",
-            "TA 在你的【正南方向】。命运的红线已经悄然牵起，TA 正在走向你的路上。你们将在一个阳光明媚的午后不期而遇，无需多言便能认出彼此。",
-            "TA 在你的【正北方向】。在寒冷中互相取暖的宿命。你们会在某次意外的困境或低谷中相识，成为彼此一生最坚定的救赎。",
-            "TA 在你的【正东方向】。如晨曦初现般温柔，TA 就在你日常生活的边缘，可能是一个你经常擦肩而过却未曾留意的人。转身看看那些熟悉的面孔。",
-            "TA 在你的【正西方向】。如晚霞般绚烂而热烈，TA 将在一个充满艺术或音乐气息的场合闯入你的生活，带来翻天覆地的改变与激情。",
-            "TA 在你的【东北方向】。缘分藏在过去的记忆里。也许是久别重逢的故人，也许是通过老朋友偶然结识，你们的连接带着前世未了的羁绊。",
-            "TA 在你的【西南方向】。你们拥有截然不同的背景，甚至是对立的性格，却在某个跨界的领域中产生致命的吸引。TA 正在那个未知的领域等你。"
-        ]
+        love: {
+            locations: {
+                'C': [
+                    "在【西北方向】的某座古老城市里", 
+                    "在充满旧时光回忆的静谧角落", 
+                    "在远离喧嚣的深海或湖畔旁", 
+                    "在某个你曾无数次梦见却未曾涉足的异国街头",
+                    "在那些保存着历史温度的博物馆或旧书店中"
+                ],
+                'T': [
+                    "在【东南方向】的繁华都市边缘", 
+                    "在充满未知与冒险的旅途终点", 
+                    "在人声鼎沸、思想交锋的聚会中心", 
+                    "在你即将踏入的一个全新跨界领域里",
+                    "在某次打破常规的冲动出走中"
+                ]
+            },
+            timings: {
+                'W': [
+                    "当命运的齿轮完成最后一次咬合时，TA 将不期而至。", 
+                    "在一个毫无预兆的平凡下午，你们会在不经意间认出彼此。", 
+                    "当你在困境中几乎要向现实妥协的那个瞬间，TA 会作为变数降临。", 
+                    "那将是一场如同暴雨般突如其来的相遇，没有任何防备。"
+                ],
+                'I': [
+                    "当你终于鼓起勇气迈出改变的那一步时，TA 就在道路的前方等你。", 
+                    "在你决定放下过去某段深刻执念的瞬间，新的红线才会悄然牵起。", 
+                    "当你独自踏上寻找自我的远行时，你们的轨迹将发生致命的交汇。", 
+                    "在你勇敢拒绝某种世俗规则、坚持真实自我的那一刻，TA 会被你的光芒吸引。"
+                ]
+            },
+            traits: {
+                'S': [
+                    "TA 带着如恒星般耀眼的光芒，将毫无保留地照亮你的所有盲区。你们的相遇将是一场感官与灵魂的盛宴，TA 会用绝对的偏爱，彻底融化你内心深处的冰川。", 
+                    "这段羁绊热烈而直白，TA 就像一团燃烧的火焰，打破你原有的规则，带你领略生命中未曾涉足的疯狂与美丽。",
+                    "TA 会是你生命中最强烈的引力源，你们的爱将如同超新星爆发般绚烂，烧尽所有的孤独与迟疑。"
+                ],
+                'M': [
+                    "TA 带着深渊般的宁静，你们将如同双星系统般完美共舞。既有致命的吸引力，又保持着最舒适的引力距离，守护着各自完整的灵魂宇宙。", 
+                    "这段羁绊建立在势均力敌的共振之上。TA 的爱如深水般包容，无需多言便能读懂你所有的沉默与破碎。",
+                    "你们是太极的两极，在看似平行的轨道中产生着最深沉的量子纠缠。TA 将是你最默契的战友，也是你灵魂深处最安稳的锚点。"
+                ]
+            }
+        }
     };
 
     // 外部加载的扩展文案库
@@ -604,6 +649,15 @@
                     options: [
                         { text: "那是终极的安息，灵魂如水滴般归于无边宁静的虚无", value: "V" },
                         { text: "那是一扇门，通往另一场截然不同的伟大冒险", value: "B" }
+                    ]
+                },
+                {
+                    en: "Connection",
+                    id: "羁绊",
+                    text: "面对深沉的羁绊与爱，你的灵魂倾向于？",
+                    options: [
+                        { text: "像恒星般燃烧自己，毫无保留地给予对方光和热", value: "S" },
+                        { text: "像双星系统般互相环绕，保持独立的轨道与引力", value: "M" }
                     ]
                 }
             ];
@@ -662,6 +716,7 @@
                 const c2 = code[1]; // W or I
                 const c3 = code[2]; // O or R
                 const c4 = code[3]; // V or B
+                const c5 = code[4]; // S or M
 
                 // 使用随机抽取函数确保文案多样性
                 result.value.identity = pick(database.identity[c1 + c3]);
@@ -675,9 +730,12 @@
                 result.value.meaning = pick(database.meaning[c1]);
                 result.value.whoChose = pick(database.whoChose[c2]);
 
-                // 爱人方位：基于一定逻辑的随机抽取，防止同一个人在不同时间测出不同方位，可以使用时间戳或名字，这里用简单的时间戳取余增加一定的“玄学”变化
-                const loveIndex = (c1.charCodeAt(0) + c2.charCodeAt(0) + c3.charCodeAt(0) + c4.charCodeAt(0) + new Date().getSeconds()) % database.love.length;
-                result.value.love = database.love[loveIndex];
+                // 爱人方位：基于用户选项的动态组合生成，确保千人千面
+                const loveLocation = pick(database.love.locations[c1]);
+                const loveTiming = pick(database.love.timings[c2]);
+                const loveTrait = pick(database.love.traits[c5]);
+                
+                result.value.love = `TA 的坐标锁定${loveLocation}。${loveTiming}${loveTrait}`;
 
                 step.value = 'result';
                 
