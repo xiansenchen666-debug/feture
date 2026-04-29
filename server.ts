@@ -14,5 +14,16 @@ Deno.serve({ port: 8000 }, async (req) => {
     }
   }
 
+  if (url.pathname === "/database.json") {
+    try {
+      const json = await Deno.readFile("./database.json");
+      return new Response(json, {
+        headers: { "content-type": "application/json; charset=utf-8" },
+      });
+    } catch (e) {
+      return new Response("Error: database.json not found", { status: 404 });
+    }
+  }
+
   return new Response("Not found", { status: 404 });
 });

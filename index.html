@@ -552,6 +552,14 @@
         ]
     };
 
+    // 外部加载的扩展文案库
+    let externalDatabase = {
+        pastLife: [],
+        currentLife: [],
+        origin: [],
+        futureLife: []
+    };
+
     createApp({
         setup() {
             const step = ref('intro1'); // intro1, intro2, intro3, intro4, question, loading, result
@@ -658,10 +666,12 @@
                 // 使用随机抽取函数确保文案多样性
                 result.value.identity = pick(database.identity[c1 + c3]);
                 result.value.originDest = pick(database.originDest[c1 + '_' + c4]);
-                result.value.past = pick(database.past[c1]);
-                result.value.future = pick(database.future[c4]);
-                result.value.present = pick(database.present[c2]);
-                result.value.whyHere = pick(database.whyHere[c3]);
+                // 优先使用外部加载的故事性文案库，如果没有则回退到内置文案
+                result.value.past = externalDatabase.pastLife.length > 0 ? pick(externalDatabase.pastLife) : pick(database.past[c1]);
+                result.value.future = externalDatabase.futureLife.length > 0 ? pick(externalDatabase.futureLife) : pick(database.future[c4]);
+                result.value.present = externalDatabase.currentLife.length > 0 ? pick(externalDatabase.currentLife) : pick(database.present[c2]);
+                result.value.whyHere = externalDatabase.origin.length > 0 ? pick(externalDatabase.origin) : pick(database.whyHere[c3]);
+                
                 result.value.meaning = pick(database.meaning[c1]);
                 result.value.whoChose = pick(database.whoChose[c2]);
 
@@ -679,9 +689,22 @@
                 step.value = 'intro1';
             };
 
-            onMounted(() => {
+            onMounted(async () => {
+                try {
+                    const res = await fetch('/database.json');
+                    if (res.ok) {
+                        const data = await res.json();
+                        externalDatabase = data;
+                        console.log('Story database loaded successfully.');
+                    }
+                } catch (e) {
+                    console.error('Failed to load external database:', e);
+                }
+                
                 // 等待 Vue 挂载完毕后初始化 Canvas
-                setTimeout(initCanvas, 100);
+                setTimeout(() => {
+                    if (typeof initCanvas === 'function') initCanvas();
+                }, 100);
             });
 
             return {
