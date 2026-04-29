@@ -2,189 +2,534 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>灵魂寻迹 - 前世今生与未来</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOUL TRACE | 灵魂寻迹</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --dark-bg: #030305;
+        }
         body {
             font-family: 'Noto Serif SC', serif;
-            background-color: #050510;
+            background-color: var(--dark-bg);
             color: #e5e7eb;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(20, 20, 40, 1), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(20, 10, 40, 1), transparent 25%);
-            background-size: cover;
-            background-attachment: fixed;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        .font-en {
+            font-family: 'Cinzel', serif;
         }
-        .fade-enter-active, .fade-leave-active {
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .fade-enter-from, .fade-leave-to {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        .option-btn {
-            transition: all 0.3s ease;
-        }
-        .option-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        .star {
+        /* Canvas Background */
+        #canvas-bg {
             position: fixed;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle infinite alternate;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
-        @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 0.8; transform: scale(1.2); }
+        /* Premium Glassmorphism */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        }
+        .glass-card {
+            background: rgba(20, 20, 25, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            background: rgba(30, 30, 40, 0.6);
+        }
+        /* Typography Highlights */
+        .text-gold {
+            color: var(--gold);
+        }
+        .border-gold {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        .accent-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+        /* Transitions */
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .fade-enter-from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .fade-leave-to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        /* Option Button */
+        .option-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .option-btn:active::before {
+            left: 100%;
+            transition: 0s;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+        }
+        
+        /* Glitch Text for Loading */
+        .glitch {
+            position: relative;
+            color: white;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-5deg); }
+            40% { transform: skew(5deg); }
+            60% { transform: skew(-2deg); }
+            80% { transform: skew(2deg); }
+            100% { transform: skew(0deg); }
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body class="flex items-center justify-center p-4 md:p-8">
 
-<div id="app" class="w-full max-w-lg min-h-[80vh] flex flex-col relative">
-    
-    <!-- 星空背景生成 -->
-    <div v-for="n in 30" :key="n" class="star" 
-         :style="{ 
-             top: Math.random() * 100 + '%', 
-             left: Math.random() * 100 + '%', 
-             width: (Math.random() * 2 + 1) + 'px', 
-             height: (Math.random() * 2 + 1) + 'px',
-             animationDuration: (Math.random() * 3 + 2) + 's' 
-         }">
-    </div>
+<!-- WebGL/Canvas Starfield Background -->
+<canvas id="canvas-bg"></canvas>
 
+<div id="app" class="w-full max-w-2xl min-h-[85vh] flex flex-col relative z-10">
     <transition name="fade" mode="out-in">
-        <!-- 欢迎页 -->
-        <div v-if="step === 'welcome'" key="welcome" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-2xl">
-            <h1 class="text-3xl md:text-4xl font-semibold mb-6 tracking-widest text-white drop-shadow-lg">灵魂寻迹</h1>
-            <p class="text-sm md:text-base text-gray-400 mb-8 leading-relaxed tracking-wider">
-                生从何来，死往何处？<br>
-                你是谁，你的爱人在哪里？<br>
-                在宇宙的阿卡夏记录中，<br>
-                寻找属于你的宿命档案。
-            </p>
-            <button @click="startTest" class="px-8 py-3 rounded-full border border-gray-500 text-gray-300 hover:text-white hover:border-white transition-all duration-300 tracking-widest">
-                开启寻迹
+        
+        <!-- ================= WELCOME ================= -->
+        <div v-if="step === 'welcome'" key="welcome" class="flex flex-col items-center flex-1 text-center glass-panel p-6 md:p-12 rounded-3xl overflow-y-auto max-h-[90vh]">
+            <div class="mb-6 opacity-80 mt-4">
+                <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase">Soul Matrix</p>
+                <div class="accent-line"></div>
+            </div>
+            
+            <h1 class="text-3xl md:text-5xl font-semibold mb-10 tracking-widest text-white drop-shadow-2xl">
+                灵魂坐标定位系统
+            </h1>
+            
+            <div class="w-full max-w-xl text-left space-y-10 text-sm md:text-base text-gray-300 leading-loose tracking-wide font-light">
+                
+                <!-- 引言 -->
+                <section class="glass-card p-6 rounded-2xl text-center">
+                    <p class="italic text-gray-400 mb-4 tracking-widest">“我是谁？生从何来，死往何处？”</p>
+                    <p class="mb-4">自人类仰望星空起，这些关于生命本质的叩问便从未停止。我们在这个浩瀚的世界里寻觅意义，渴望知道自己的来处与归途。</p>
+                    <p>本工具是一款汲取了 MBTI 分类逻辑灵感，但专为探索“人类终极存在主义与灵性状态”而设计的深度测绘系统。我们将晦涩的哲学命题转化为可视化的灵魂坐标，带你开启一场向内深潜的觉醒之旅。</p>
+                </section>
+
+                <!-- 核心维度 -->
+                <section>
+                    <div class="flex items-center justify-center mb-8 border-b border-gold/20 pb-4">
+                        <h2 class="text-xl text-gold tracking-widest font-medium">【 你将在这里探索什么？ 】</h2>
+                    </div>
+                    <p class="text-center mb-8 text-gray-400">通过本系统的四个核心维度，你将解锁一份专属的“灵魂档案”：</p>
+                    
+                    <div class="space-y-6">
+                        <div class="pl-4 border-l-2 border-gold/40 hover:border-gold transition-colors duration-300">
+                            <h3 class="text-white font-medium mb-2 tracking-widest">时空与轮回 <span class="font-en text-gold/60 text-xs ml-2">Origin & Destiny</span></h3>
+                            <p class="text-gray-400">解码你灵魂的生命周期。探寻你“生从何来，死往何处”，并描绘你的前世印记、今世形态以及下一世的可能归宿。</p>
+                        </div>
+                        
+                        <div class="pl-4 border-l-2 border-gold/40 hover:border-gold transition-colors duration-300">
+                            <h3 class="text-white font-medium mb-2 tracking-widest">身份与意义 <span class="font-en text-gold/60 text-xs ml-2">Identity & Purpose</span></h3>
+                            <p class="text-gray-400">解答“我是谁”以及“为什么要出现在这个世界”。揭示你的存在对这个宇宙而言，究竟是一场破局、一次见证，还是某种不可或缺的拼图。</p>
+                        </div>
+                        
+                        <div class="pl-4 border-l-2 border-gold/40 hover:border-gold transition-colors duration-300">
+                            <h3 class="text-white font-medium mb-2 tracking-widest">意志与契约 <span class="font-en text-gold/60 text-xs ml-2">Will & Agency</span></h3>
+                            <p class="text-gray-400">剖析你与这颗星球的底层羁绊——探究究竟是宏大的命运“选择”了你，还是你带着强烈的意志力主动“选择”了降生于此。</p>
+                        </div>
+                        
+                        <div class="pl-4 border-l-2 border-gold/40 hover:border-gold transition-colors duration-300">
+                            <h3 class="text-white font-medium mb-2 tracking-widest">宿命与羁绊 <span class="font-en text-gold/60 text-xs ml-2">Love & Compass</span></h3>
+                            <p class="text-gray-400">开启你的灵魂伴侣雷达。通过潜意识的投射，指引你命中注定的爱人正处于何种生命状态、身在何方，以及你们相遇的灵性方位。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 结语 -->
+                <section class="text-center pt-8 border-t border-gray-800">
+                    <p class="text-gray-400 tracking-widest leading-loose">
+                        这不仅仅是一场心理测试，<br>
+                        更是一次与宇宙的深度对话。<br>
+                        <span class="text-gold mt-2 block">在这里，褪去尘世的标签，<br>定位你的绝对坐标，看见最真实的自己。</span>
+                    </p>
+                </section>
+
+            </div>
+            
+            <button @click="startTest" class="mt-12 mb-6 group relative px-12 py-4 rounded-full border border-gold/40 text-gray-300 hover:text-gold hover:border-gold transition-all duration-700 tracking-[0.3em] overflow-hidden bg-black/30">
+                <span class="relative z-10 font-en text-xs uppercase mr-2 opacity-70">INITIATE</span> 开启深潜之旅
+                <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
             </button>
         </div>
 
-        <!-- 答题页 -->
-        <div v-else-if="step === 'question'" :key="'q'+currentQuestionIndex" class="flex flex-col justify-center flex-1 glass-panel p-6 md:p-8 rounded-2xl">
-            <div class="mb-8 flex items-center justify-between text-xs text-gray-500 tracking-widest">
-                <span>{{ questions[currentQuestionIndex].id }}</span>
-                <span>{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+        <!-- ================= QUESTION ================= -->
+        <div v-else-if="step === 'question'" :key="'q'+currentQuestionIndex" class="flex flex-col justify-center flex-1 glass-panel p-8 md:p-12 rounded-3xl">
+            <div class="mb-12 flex flex-col items-center justify-center">
+                <p class="font-en text-gold text-xs tracking-[0.4em] mb-2 uppercase">{{ questions[currentQuestionIndex].en }}</p>
+                <h3 class="text-sm text-gray-500 tracking-[0.3em] mb-4">{{ questions[currentQuestionIndex].id }}</h3>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
             </div>
             
-            <h2 class="text-xl md:text-2xl font-medium mb-10 leading-relaxed tracking-wide">
+            <h2 class="text-xl md:text-2xl font-medium mb-12 leading-relaxed tracking-widest text-center text-gray-100">
                 {{ questions[currentQuestionIndex].text }}
             </h2>
 
-            <div class="space-y-4">
+            <div class="space-y-6">
                 <button v-for="(opt, idx) in questions[currentQuestionIndex].options" :key="idx" 
                         @click="answerQuestion(opt.value)"
-                        class="option-btn w-full text-left p-5 rounded-xl border border-gray-700 bg-black/20 text-sm md:text-base leading-relaxed tracking-wide">
+                        class="option-btn w-full text-left p-6 rounded-2xl border border-gray-800 bg-black/40 text-sm md:text-base leading-relaxed tracking-wide hover:border-gold/50 hover:bg-black/60 text-gray-300 hover:text-white">
+                    <span class="font-en text-gold/50 mr-3 text-xs">{{ String.fromCharCode(65 + idx) }}.</span> 
                     {{ opt.text }}
                 </button>
             </div>
+            
+            <div class="mt-12 flex justify-center space-x-2">
+                <div v-for="n in questions.length" :key="n" 
+                     class="w-2 h-2 rounded-full transition-all duration-500"
+                     :class="n - 1 === currentQuestionIndex ? 'bg-gold scale-125 shadow-[0_0_10px_rgba(212,175,55,0.8)]' : 'bg-gray-700'">
+                </div>
+            </div>
         </div>
 
-        <!-- 加载页 -->
-        <div v-else-if="step === 'loading'" key="loading" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-2xl">
-            <div class="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin mb-6"></div>
-            <p class="text-gray-400 tracking-widest animate-pulse">正在连接阿卡夏记录...</p>
+        <!-- ================= LOADING ================= -->
+        <div v-else-if="step === 'loading'" key="loading" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 rounded-3xl">
+            <div class="relative w-24 h-24 mb-8 flex items-center justify-center">
+                <div class="absolute inset-0 border-t-2 border-gold rounded-full animate-[spin_2s_linear_infinite]"></div>
+                <div class="absolute inset-2 border-r-2 border-white/30 rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
+                <div class="absolute inset-4 border-b-2 border-gold/50 rounded-full animate-[spin_1.5s_linear_infinite]"></div>
+                <div class="font-en text-xs text-gold tracking-widest">{{ loadingProgress }}%</div>
+            </div>
+            <p class="font-en text-gray-500 tracking-[0.3em] text-xs mb-2">DECRYPTING SOUL MATRIX</p>
+            <p class="text-gray-300 tracking-widest glitch">{{ loadingText }}</p>
+            <p class="font-en text-gold/40 text-[10px] mt-4 tracking-widest">{{ hexStream }}</p>
         </div>
 
-        <!-- 结果页 -->
-        <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-8 rounded-2xl overflow-y-auto max-h-[90vh]">
-            <h1 class="text-2xl md:text-3xl font-semibold mb-8 text-center tracking-widest border-b border-gray-700 pb-4">
-                你的宿命档案
-            </h1>
+        <!-- ================= RESULT ================= -->
+        <div v-else-if="step === 'result'" key="result" class="flex flex-col flex-1 glass-panel p-6 md:p-10 rounded-3xl overflow-y-auto max-h-[90vh]">
+            
+            <!-- Header -->
+            <div class="text-center mb-10 border-b border-gold/20 pb-8 relative">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                <p class="font-en text-gold text-xs tracking-[0.5em] mb-4 mt-4">AKASHIC DOSSIER</p>
+                <h1 class="text-3xl md:text-4xl font-semibold mb-4 tracking-widest text-white">
+                    {{ result.identity.cn }}
+                </h1>
+                <p class="font-en text-gray-400 tracking-[0.2em] text-sm">{{ result.identity.en }}</p>
+                <div class="mt-6 inline-block px-4 py-1 border border-gold/30 rounded-full bg-gold/5">
+                    <p class="font-en text-xs text-gold tracking-[0.4em]">CODE: {{ finalCode }}</p>
+                </div>
+            </div>
 
-            <div class="space-y-8 text-sm md:text-base text-gray-300 leading-relaxed tracking-wide">
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 我是谁 】</h3>
-                    <p class="text-xl text-white tracking-widest mb-2">{{ result.identity }}</p>
-                    <p class="text-xs text-gray-500">灵魂代码: {{ finalCode }}</p>
-                </section>
+            <div class="space-y-8 text-sm md:text-base text-gray-300 leading-relaxed tracking-wide font-light">
+                
+                <!-- Origin & Dest -->
+                <div class="text-center italic text-gray-400 mb-8 px-4">
+                    " {{ result.originDest }} "
+                </div>
 
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 生从何来，死往何处 】</h3>
-                    <p>{{ result.originDest }}</p>
-                </section>
-
+                <!-- Past & Future Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <section class="bg-white/5 p-4 rounded-lg border border-white/5">
-                        <h3 class="text-white font-medium mb-2 opacity-80 text-sm">【 前世 】</h3>
-                        <p class="text-sm">{{ result.past }}</p>
+                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-6xl opacity-5 font-en">PAST</div>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1">PREVIOUS INCARNATION</h3>
+                        <h4 class="text-white font-medium mb-4 tracking-widest text-sm border-b border-gray-700 pb-2 inline-block">【 前世羁绊 】</h4>
+                        <p class="text-sm text-gray-400 leading-loose">{{ result.past }}</p>
                     </section>
-                    <section class="bg-white/5 p-4 rounded-lg border border-white/5">
-                        <h3 class="text-white font-medium mb-2 opacity-80 text-sm">【 下一世 】</h3>
-                        <p class="text-sm">{{ result.future }}</p>
+                    
+                    <section class="glass-card p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-6xl opacity-5 font-en">NEXT</div>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1">NEXT INCARNATION</h3>
+                        <h4 class="text-white font-medium mb-4 tracking-widest text-sm border-b border-gray-700 pb-2 inline-block">【 来世归宿 】</h4>
+                        <p class="text-sm text-gray-400 leading-loose">{{ result.future }}</p>
                     </section>
                 </div>
 
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 今生宿命 】</h3>
-                    <p>{{ result.present }}</p>
+                <!-- Present Life -->
+                <section class="glass-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
+                        <h4 class="text-white font-medium tracking-widest text-sm">【 今生宿命 】</h4>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em]">CURRENT LIFE</h3>
+                    </div>
+                    <p class="text-gray-400 leading-loose">{{ result.present }}</p>
                 </section>
 
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 为什么要出现这个世界 】</h3>
-                    <p>{{ result.whyHere }}</p>
+                <!-- Purpose & Meaning -->
+                <section class="glass-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
+                        <h4 class="text-white font-medium tracking-widest text-sm">【 降生意义 】</h4>
+                        <h3 class="font-en text-gold text-xs tracking-[0.3em]">EXISTENTIAL PURPOSE</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">为何而来：</span>{{ result.whyHere }}</p>
+                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">世界回响：</span>{{ result.meaning }}</p>
+                        <p class="text-gray-400 leading-loose"><span class="text-gold/80">灵魂契约：</span>{{ result.whoChose }}</p>
+                    </div>
                 </section>
 
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 我的出现意味着什么 】</h3>
-                    <p>{{ result.meaning }}</p>
-                </section>
-
-                <section>
-                    <h3 class="text-white font-medium mb-2 opacity-80">【 谁选择了谁 】</h3>
-                    <p>{{ result.whoChose }}</p>
-                </section>
-
-                <section class="mt-6 border-t border-gray-700 pt-6">
-                    <h3 class="text-white font-medium mb-3 opacity-80 text-lg">【 爱人所在的方位 】</h3>
-                    <p class="italic text-gray-400">{{ result.love }}</p>
+                <!-- Love -->
+                <section class="relative mt-12 p-8 border border-gold/30 rounded-2xl bg-gradient-to-b from-gold/5 to-transparent text-center">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-dark-bg px-4 font-en text-gold text-xs tracking-[0.4em]">
+                        SOULMATE COMPASS
+                    </div>
+                    <h4 class="text-white font-medium mb-6 tracking-widest text-lg">【 爱人所在的方位 】</h4>
+                    <p class="text-gray-300 leading-loose tracking-widest">{{ result.love }}</p>
                 </section>
             </div>
 
-            <div class="mt-10 text-center">
-                <button @click="resetTest" class="px-6 py-2 rounded-full border border-gray-600 text-xs text-gray-400 hover:text-white hover:border-white transition-all duration-300 tracking-widest">
-                    重新凝视灵魂
+            <!-- Footer -->
+            <div class="mt-16 text-center pb-4">
+                <button @click="resetTest" class="font-en text-xs px-8 py-3 rounded-full border border-gray-700 text-gray-500 hover:text-gold hover:border-gold transition-all duration-500 tracking-[0.3em] uppercase bg-black/50">
+                    Re-align Matrix | 重新凝视
                 </button>
+                <p class="text-[10px] text-gray-700 mt-6 font-en tracking-[0.2em]">© 2024 AKASHIC SYSTEM V2.0</p>
             </div>
         </div>
     </transition>
 </div>
 
+<!-- ================= COPYWRITING DATA & VUE LOGIC ================= -->
 <script>
-    const { createApp, ref, computed } = Vue;
+    // ---------------- CANVAS BACKGROUND SCRIPT ----------------
+    function initCanvas() {
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 1.5 + 0.1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            resize();
+            particles = [];
+            let count = window.innerWidth < 768 ? 50 : 150;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+            window.addEventListener('resize', resize);
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw subtle nebula gradient
+            let gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+            gradient.addColorStop(0, 'rgba(20, 20, 35, 0.4)');
+            gradient.addColorStop(1, 'rgba(3, 3, 5, 1)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        
+        init();
+    }
+
+    // ---------------- VUE APP SCRIPT ----------------
+    const { createApp, ref, onMounted, onUnmounted } = Vue;
+
+    // 随机抽取器，确保每次结果有细微差别
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    // 多样化文案库 (International + High-end)
+    const database = {
+        identity: {
+            'CO': [
+                { cn: "宇宙的守望者", en: "THE COSMIC WATCHER" },
+                { cn: "深空的注视者", en: "THE DEEP SPACE OBSERVER" },
+                { cn: "星轨的记录员", en: "THE STELLAR ARCHIVIST" }
+            ],
+            'CR': [
+                { cn: "星辰的编织者", en: "THE STAR WEAVER" },
+                { cn: "银河的重塑者", en: "THE GALAXY FORGER" },
+                { cn: "虚空的引路人", en: "THE VOID NAVIGATOR" }
+            ],
+            'TO': [
+                { cn: "大地的记录者", en: "THE EARTH RECORDER" },
+                { cn: "纪元的见证者", en: "THE ERA WITNESS" },
+                { cn: "时光的拾荒者", en: "THE TIME SCAVENGER" }
+            ],
+            'TR': [
+                { cn: "尘世的开创者", en: "THE WORLD BUILDER" },
+                { cn: "文明的执剑人", en: "THE CIVILIZATION SWORD" },
+                { cn: "法则的刻碑者", en: "THE LAW ENGRAVER" }
+            ]
+        },
+        originDest: {
+            'C_V': ["生于璀璨星尘，死往永恒虚空。", "从光之海中析出，终将归于绝对的宁静。", "起源于超新星的余烬，湮灭于宇宙热寂。"],
+            'C_B': ["生于璀璨星尘，死往无尽轮回。", "带着高维的印记降生，将在无数个硅基世界流浪。", "从银河旋臂而来，向着多重宇宙的裂隙而去。"],
+            'T_V': ["生于厚重黄土，死往永恒虚空。", "从泥泞与岩浆中爬起，最终消散于寂灭的风中。", "带着大地母亲的脉动，走向没有重力的绝对虚无。"],
+            'T_B': ["生于厚重黄土，死往无尽轮回。", "以碳基之躯承载远古记忆，在生生世世中不断涅槃。", "从最原始的部落文明走来，奔向无数个未知的异星家园。"]
+        },
+        past: {
+            'C': [
+                "你曾是天狼星系边缘的纯粹灵体，在光之海中吟唱着无声的诗篇，未曾沾染物质的沉重。那时的你，没有形体，只有意识在宇宙微波背景辐射中穿梭。",
+                "在数个纪元前，你是一个高维度文明的观测者。你曾亲眼目睹星系的碰撞与黑洞的坍缩，你的灵魂里刻着宇宙最宏大的几何图案。",
+                "你是一颗古老超新星爆发后的残骸所化，在冰冷的真空中漂浮了数十亿年，带着宇宙初开时的孤独记忆，最终被太阳系的引力捕获。"
+            ],
+            'T': [
+                "你曾是古老地球上最原始文明的祭司。在篝火旁，你用双手在泥土上刻下人类第一部法典，你的指甲里至今还残留着那片土地的红壤气息。",
+                "在亚特兰蒂斯沉没之前，你是一位掌握大地共振规律的学者。你曾试图用晶石挽救文明的倾覆，海水吞没你的那一刻，你将知识封印在了灵魂深处。",
+                "你曾无数次化作飞鸟与走兽，深刻体验过这颗蓝色星球最原始的血与火、生与死。每一次心跳的停止，都让你对这片土地爱得更加深沉。"
+            ]
+        },
+        future: {
+            'V': [
+                "你将化为宇宙背景辐射中的一抹微光，不再拥有形体，也不再有情绪的起伏。你将作为一种绝对的宁静，存在于万物之间，无处不在。",
+                "你的意识将剥离这具碳基躯壳，汇入宇宙的统一场中。没有来生，没有重逢，只有终极的圆满与解脱，你将成为‘虚空’本身。",
+                "在时间的长河尽头，你将选择主动解体，把灵魂的碎片归还给群星。这是一场盛大的告别，从此宇宙中再无你，但处处都是你。"
+            ],
+            'B': [
+                "你将降生于一个没有重力的硅基星球。在那里，沟通不再需要语言，而是依靠意识光谱的交叠。你将以全新的形态，继续探索生命的无限可能。",
+                "死亡对你而言只是一扇门。下一世，你可能会成为某个双星系统中的流浪商人，或者是某个正在经历冰河期的原始星球上的火种保留者。",
+                "你的灵魂蓝图太过庞大，一世的时间根本无法演练完毕。你将在平行宇宙中再次醒来，面对截然不同的物理法则，开启下一场伟大的冒险。"
+            ]
+        },
+        present: {
+            'W': [
+                "背负着时代的重量，你的今生是一场注定的修行。在悲欢离合中体验生而为人的厚度，所有的身不由己，都是为了锤炼灵魂的韧性。",
+                "你像是被命运洪流裹挟前行的逆旅者。那些看似不公的遭遇，其实是阿卡夏记录中为你量身定制的阻力训练，为了唤醒你沉睡的神性。",
+                "今生你拿着的是‘困难模式’的剧本。世界将最复杂的谜题交给了你，你在红尘中摸爬滚打，每一次流泪都是在洗刷灵魂的杂质。"
+            ],
+            'I': [
+                "带着明确的灵魂蓝图而来，你的今生更像是一场沉浸式体验游戏。所有的磨难，都是你来之前为了防止无聊而为自己设置的关卡。",
+                "你是主动签下契约的勇士。在降生前，你审视了这段充满变数的人生轨迹，然后微笑着按下了‘确认’键。你来，是为了品尝‘存在’的滋味。",
+                "你在这个世界的每一寸脚印，都是你自由意志的体现。没有什么能真正困住你，因为你深知，连这具肉身也不过是你借来的潜水服。"
+            ]
+        },
+        whyHere: {
+            'O': [
+                "为了见证。世界需要一双清澈的眼睛来凝视它的美丽与荒芜，你的存在本身就是一种对世间的悲悯与注视。你不必做什么，看着就足够了。",
+                "你是一面镜子。你来到这里，是为了让这个喧嚣的世界能在你身上照见它自己的倒影。你的静默，是对抗疯狂最优雅的武器。",
+                "为了收集数据。你的灵魂是一个庞大图书馆的终端机，你在此经历的所有情感波动、爱恨情仇，最终都会化作宇宙意识进化的养分。"
+            ],
+            'R': [
+                "为了改变。世界在停滞中呼唤破局者，你的到来是为了推动命运的齿轮，让死水重新流动。哪怕要承受被误解的孤独。",
+                "你是一团火，降生于寒冬。你之所以出现在这里，是因为旧的秩序需要被打破，你的灵魂里携带着重建新世界的密码。",
+                "为了修复这片土地的创伤。你不是来享受的，你是来工作的。你的双手拥有重塑现实的力量，你将把混乱编织成新的和谐。"
+            ]
+        },
+        meaning: {
+            'C': [
+                "像是一滴清泉落入干涸的沙漠，你为这个沉重的物质世界带来了轻盈、浪漫与不可多得的灵性。你让人相信，除了柴米油盐，还有星空。",
+                "你是这个世界的‘通风口’。当人们被现实压得喘不过气时，你身上那种不属于这里的超脱感，能给他们带来片刻的救赎。",
+                "你证明了浪漫是不朽的。在这个计算利益的时代，你依然保留着对宇宙最纯粹的好奇，你的存在本身，就是一首抵抗庸俗的诗。"
+            ],
+            'T': [
+                "像是一棵大树扎根于悬崖的岩缝，你为这个漂浮不定的虚无时代注入了坚韧、力量与真实的触感。你是许多人心中的锚点。",
+                "你是大地母亲最坚实的护盾。在动荡不安的岁月里，你所展现出的稳重与担当，让周围的人感到无比安心。你承载着真实的重量。",
+                "你证明了平凡中蕴含着伟岸。你不去追求虚无缥缈的幻影，而是用双手在泥土中建起高楼。你的出现，让这个世界变得更加坚固。"
+            ]
+        },
+        whoChose: {
+            'W': [
+                "是世界选择了你。在无数个濒临破碎的平行时空里，这个时代向你的灵魂发出了求救的频率，而你因为共振，被拉扯到了这里。",
+                "是历史的必然抓住了你。这片土地需要一种特定的能量来平衡，而你的灵魂特征刚好匹配。你被命运的引力场精准捕获。",
+                "世界像一个庞大的拼图，而你刚好是缺失的那一块。在冥冥之中，宇宙的意志将你安插在了此刻的时空坐标上。"
+            ],
+            'I': [
+                "是你选择了世界。在灵魂的圣殿里，你在一万个星球中唯独指向了这颗蓝色的水球，因为这里有你未竟的体验和想要再见一面的人。",
+                "这完全是你的个人意愿。在进入轮回之前，你排除了那些安逸的高维世界，执意要来体验这种充满摩擦力与痛感的碳基生命。",
+                "是你用极大的勇气，从无尽的可能中截取了这一种可能。世界不过是你灵魂演练场的沙盘，你才是那个执子之人。"
+            ]
+        },
+        love: [
+            "TA 在你的【西北方向】。隔着千山万水，可能此刻正和你仰望同一片星空。你们的相遇需要一次长途旅行的契机，或者一场勇敢的出走。",
+            "TA 在你的【东南方向】。就在繁华都市的某个静谧角落，可能正在某家咖啡馆翻阅旧书，等待那个能听懂灵魂频率的人。请留意下雨天的屋檐。",
+            "TA 在你的【正南方向】。命运的红线已经悄然牵起，TA 正在走向你的路上。你们将在一个阳光明媚的午后不期而遇，无需多言便能认出彼此。",
+            "TA 在你的【正北方向】。在寒冷中互相取暖的宿命。你们会在某次意外的困境或低谷中相识，成为彼此一生最坚定的救赎。",
+            "TA 在你的【正东方向】。如晨曦初现般温柔，TA 就在你日常生活的边缘，可能是一个你经常擦肩而过却未曾留意的人。转身看看那些熟悉的面孔。",
+            "TA 在你的【正西方向】。如晚霞般绚烂而热烈，TA 将在一个充满艺术或音乐气息的场合闯入你的生活，带来翻天覆地的改变与激情。",
+            "TA 在你的【东北方向】。缘分藏在过去的记忆里。也许是久别重逢的故人，也许是通过老朋友偶然结识，你们的连接带着前世未了的羁绊。",
+            "TA 在你的【西南方向】。你们拥有截然不同的背景，甚至是对立的性格，却在某个跨界的领域中产生致命的吸引。TA 正在那个未知的领域等你。"
+        ]
+    };
 
     createApp({
         setup() {
             const step = ref('welcome'); // welcome, question, loading, result
             const currentQuestionIndex = ref(0);
             const answers = ref([]);
+            const loadingProgress = ref(0);
+            const loadingText = ref('解析量子纠缠态...');
+            const hexStream = ref('0x00000000');
 
             const questions = [
                 {
-                    id: "源流 (Origin)",
+                    en: "Origin",
+                    id: "源流",
                     text: "当你凝视无垠星空时，你内心深处最先泛起的涟漪是？",
                     options: [
                         { text: "对失落故乡的深深眷恋，仿佛灵魂原本属于那里", value: "C" },
@@ -192,7 +537,8 @@
                     ]
                 },
                 {
-                    id: "选择 (Choice)",
+                    en: "Choice",
+                    id: "选择",
                     text: "回首过往种种，你觉得你的降生是？",
                     options: [
                         { text: "被某种宏大的命运之手推入这喧嚣红尘", value: "W" },
@@ -200,7 +546,8 @@
                     ]
                 },
                 {
-                    id: "目的 (Purpose)",
+                    en: "Purpose",
+                    id: "目的",
                     text: "当周遭世界陷入混乱与无序，你会本能地选择？",
                     options: [
                         { text: "退后一步，静静观察，试图理解这混沌背后的真理", value: "O" },
@@ -208,7 +555,8 @@
                     ]
                 },
                 {
-                    id: "归宿 (Destination)",
+                    en: "Destination",
+                    id: "归宿",
                     text: "你如何看待生命最终的消逝？",
                     options: [
                         { text: "那是终极的安息，灵魂如水滴般归于无边宁静的虚无", value: "V" },
@@ -231,86 +579,75 @@
                 if (answers.value.length < questions.length) {
                     currentQuestionIndex.value++;
                 } else {
-                    generateResult();
+                    startLoading();
                 }
             };
 
-            const generateResult = () => {
+            let loadInterval, hexInterval;
+
+            const startLoading = () => {
                 step.value = 'loading';
+                loadingProgress.value = 0;
                 
-                setTimeout(() => {
-                    const code = answers.value.join('');
-                    finalCode.value = code;
-                    
-                    const c1 = code[0]; // C or T
-                    const c2 = code[1]; // W or I
-                    const c3 = code[2]; // O or R
-                    const c4 = code[3]; // V or B
+                const texts = ['提取阿卡夏记录...', '解码灵魂蓝图...', '定位前世坐标...', '同步宿命频率...', '生成最终档案...'];
+                let textIdx = 0;
 
-                    // Identity
-                    if (c1 === 'C' && c3 === 'O') result.value.identity = "宇宙的守望者";
-                    else if (c1 === 'C' && c3 === 'R') result.value.identity = "星辰的编织者";
-                    else if (c1 === 'T' && c3 === 'O') result.value.identity = "大地的记录者";
-                    else if (c1 === 'T' && c3 === 'R') result.value.identity = "尘世的开创者";
+                loadInterval = setInterval(() => {
+                    loadingProgress.value += Math.floor(Math.random() * 5) + 1;
+                    if (loadingProgress.value >= 100) {
+                        loadingProgress.value = 100;
+                        clearInterval(loadInterval);
+                        clearInterval(hexInterval);
+                        setTimeout(generateResult, 500);
+                    }
+                    if (loadingProgress.value % 20 === 0 && textIdx < texts.length - 1) {
+                        textIdx++;
+                        loadingText.value = texts[textIdx];
+                    }
+                }, 100);
 
-                    // Origin & Destination
-                    let originStr = c1 === 'C' ? "生于璀璨星尘" : "生于厚重黄土";
-                    let destStr = c4 === 'V' ? "死往永恒虚空" : "死往无尽轮回";
-                    result.value.originDest = `${originStr}，${destStr}。`;
+                hexInterval = setInterval(() => {
+                    hexStream.value = '0x' + Math.random().toString(16).substr(2, 8).toUpperCase();
+                }, 50);
+            };
 
-                    // Past Life
-                    result.value.past = c1 === 'C' 
-                        ? "你曾是游离于银河边缘的纯粹灵体，在某个高等文明中吟唱着光的诗篇，未曾被物质的沉重所沾染。"
-                        : "你曾是古老地球上最原始文明的祭司或首领，用双手在泥土上刻下人类第一部法典，体验过最原始的血与火。";
+            const generateResult = () => {
+                const code = answers.value.join('');
+                finalCode.value = code;
+                
+                const c1 = code[0]; // C or T
+                const c2 = code[1]; // W or I
+                const c3 = code[2]; // O or R
+                const c4 = code[3]; // V or B
 
-                    // Future Life
-                    result.value.future = c4 === 'V'
-                        ? "你将化为宇宙背景辐射中的一抹微光，不再拥有形体，只作为一种绝对的宁静存在于万物之间。"
-                        : "你将降生于一个没有重力的硅基星球，以全新的形态和感知维度，继续探索生命的无限可能。";
+                // 使用随机抽取函数确保文案多样性
+                result.value.identity = pick(database.identity[c1 + c3]);
+                result.value.originDest = pick(database.originDest[c1 + '_' + c4]);
+                result.value.past = pick(database.past[c1]);
+                result.value.future = pick(database.future[c4]);
+                result.value.present = pick(database.present[c2]);
+                result.value.whyHere = pick(database.whyHere[c3]);
+                result.value.meaning = pick(database.meaning[c1]);
+                result.value.whoChose = pick(database.whoChose[c2]);
 
-                    // Present Life
-                    result.value.present = c2 === 'W'
-                        ? "背负着时代的重量，你的今生是一场注定的修行。在悲欢离合中体验生而为人的厚度，所有的身不由己，都是为了锤炼灵魂的韧性。"
-                        : "带着明确的灵魂蓝图而来，你的今生更像是一场沉浸式体验游戏。所有的磨难，都是你来之前为自己设置的关卡。";
+                // 爱人方位：基于一定逻辑的随机抽取，防止同一个人在不同时间测出不同方位，可以使用时间戳或名字，这里用简单的时间戳取余增加一定的“玄学”变化
+                const loveIndex = (c1.charCodeAt(0) + c2.charCodeAt(0) + c3.charCodeAt(0) + c4.charCodeAt(0) + new Date().getSeconds()) % database.love.length;
+                result.value.love = database.love[loveIndex];
 
-                    // Why Here
-                    result.value.whyHere = c3 === 'O'
-                        ? "为了见证。世界需要一双清澈的眼睛来凝视它的美丽与荒芜，你的存在本身就是一种对世间的悲悯与注视。"
-                        : "为了改变。世界在停滞中呼唤破局者，你的到来是为了推动命运的齿轮，让死水重新流动。";
-
-                    // Meaning to world
-                    result.value.meaning = c1 === 'C'
-                        ? "像是一滴清泉落入干涸的沙漠，你为这个沉重的物质世界带来了轻盈、浪漫与不可多得的灵性。"
-                        : "像是一棵大树扎根于悬崖的岩缝，你为这个漂浮不定的虚无时代注入了坚韧、力量与真实的触感。";
-
-                    // Who chose who
-                    result.value.whoChose = c2 === 'W'
-                        ? "是世界选择了你。在无数个濒临破碎的平行时空里，这个时代向你的灵魂发出了求救的频率，而你听到了。"
-                        : "是你选择了世界。在灵魂的圣殿里，你在一万个星球中唯独指向了这颗蓝色的水球，因为这里有你未竟的体验。";
-
-                    // Love
-                    const loveLocations = [
-                        "TA 在你的【西北方向】。隔着千山万水，可能此刻正和你仰望同一片星空，你们的相遇需要一次长途旅行的契机。",
-                        "TA 在你的【东南方向】。就在繁华都市的某个静谧角落，可能正在某家咖啡馆翻阅旧书，等待那个能听懂灵魂频率的人。",
-                        "TA 在你的【正南方向】。命运的红线已经悄然牵起，TA 正在走向你的路上，你们将在一个阳光明媚的午后不期而遇。",
-                        "TA 在你的【正北方向】。在寒冷中互相取暖的宿命，你们会在某次意外的困境中相识，成为彼此一生的救赎。",
-                        "TA 在你的【正东方向】。如晨曦初现般温柔，TA 就在你日常生活的边缘，可能是一个你经常擦肩而过却未曾留意的人。",
-                        "TA 在你的【正西方向】。如晚霞般绚烂而热烈，TA 将在一个充满艺术气息的场合闯入你的生活，带来翻天覆地的改变。",
-                        "TA 在你的【东北方向】。缘分藏在过去的记忆里，也许是久别重逢的故人，也许是通过老朋友偶然结识的灵魂伴侣。",
-                        "TA 在你的【西南方向】。你们拥有截然不同的背景，却在某个跨界的领域中产生奇妙的共振，TA 正在那个未知的领域等你。"
-                    ];
-                    
-                    // Simple hash based on chars
-                    const index = ((c1==='C'?0:1)*4 + (c2==='W'?0:1)*2 + (c3==='O'?0:1) + (c4==='V'?0:1)) % 8;
-                    result.value.love = loveLocations[index];
-
-                    step.value = 'result';
-                }, 2000);
+                step.value = 'result';
+                
+                // 滚动到顶部
+                setTimeout(() => window.scrollTo(0, 0), 100);
             };
 
             const resetTest = () => {
                 step.value = 'welcome';
             };
+
+            onMounted(() => {
+                // 等待 Vue 挂载完毕后初始化 Canvas
+                setTimeout(initCanvas, 100);
+            });
 
             return {
                 step,
@@ -318,6 +655,9 @@
                 currentQuestionIndex,
                 startTest,
                 answerQuestion,
+                loadingProgress,
+                loadingText,
+                hexStream,
                 result,
                 finalCode,
                 resetTest
