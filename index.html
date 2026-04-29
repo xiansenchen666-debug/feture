@@ -151,9 +151,20 @@
     <transition name="fade" mode="out-in">
         
         <!-- ================= INTRO STEP 1: 引言 ================= -->
-        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
+        <div v-if="step === 'intro1'" key="intro1" class="flex flex-col items-center justify-center flex-1 text-center glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden border-t border-gold/30">
             
-            <div class="mb-8 opacity-80 mt-4">
+            <!-- Author Signature Banner -->
+            <div class="absolute top-0 left-0 w-full bg-gradient-to-r from-transparent via-gold/10 to-transparent border-b border-gold/20 py-2">
+                <div class="flex items-center justify-center gap-4">
+                    <div class="w-12 h-[1px] bg-gold/40"></div>
+                    <span class="font-en text-sm md:text-base text-gold tracking-[0.4em] uppercase font-semibold drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">
+                        CREATED BY <span class="text-slate-50 font-bold ml-2">CARY</span>
+                    </span>
+                    <div class="w-12 h-[1px] bg-gold/40"></div>
+                </div>
+            </div>
+            
+            <div class="mb-8 opacity-80 mt-12">
                 <p class="font-en text-gold text-xs tracking-[0.5em] mb-2 uppercase font-semibold">Soul Matrix</p>
                 <div class="accent-line"></div>
             </div>
@@ -176,13 +187,6 @@
                 <span class="relative z-10 font-medium">凝视深渊 <span class="font-en text-xs ml-2">→</span></span>
                 <div class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
             </button>
-
-            <!-- Author Signature -->
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-60 flex items-center gap-2">
-                <span class="w-4 h-[1px] bg-gold/50"></span>
-                <span class="font-en text-[10px] text-slate-400 tracking-[0.3em] uppercase">Created by <span class="text-gold font-medium">Cary</span></span>
-                <span class="w-4 h-[1px] bg-gold/50"></span>
-            </div>
         </div>
 
         <!-- ================= INTRO STEP 2: 维度 1 & 2 ================= -->
