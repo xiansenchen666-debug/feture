@@ -154,23 +154,6 @@
             border-color: rgba(212, 175, 55, 0.45);
             box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.16);
         }
-        .picker-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background: rgba(2, 6, 23, 0.78);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .picker-dialog {
-            position: relative;
-            z-index: 1;
-            width: min(100%, 28rem);
-        }
     </style>
 </head>
 <body class="flex items-center justify-center p-4 md:p-8">
@@ -311,18 +294,32 @@
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生日期 <span class="font-en text-gold/60 text-xs ml-1">DATE OF BIRTH</span></label>
-                    <button @click="openDatePicker" type="button" class="w-full flex items-center justify-between bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 hover:border-gold/40 hover:bg-slate-800/70 transition-all tracking-widest">
-                        <span :class="userInfo.birthDate ? 'text-slate-200' : 'text-slate-500'">{{ userInfo.birthDate || '选择降生之日' }}</span>
-                        <span class="font-en text-gold/70 text-xs tracking-[0.25em]">DATE</span>
-                    </button>
+                    <input
+                        :value="userInfo.birthDate"
+                        @input="handleBirthDateInput"
+                        @blur="normalizeBirthDate"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="10"
+                        placeholder="按顺序输入 19991231"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest font-en"
+                    >
+                    <p class="mt-2 text-xs tracking-widest text-slate-500">输入数字后自动整理为 `YYYY-MM-DD`</p>
                 </div>
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生时间 <span class="font-en text-gold/60 text-xs ml-1">TIME OF BIRTH</span></label>
-                    <button @click="openTimePicker" type="button" class="w-full flex items-center justify-between bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 hover:border-gold/40 hover:bg-slate-800/70 transition-all tracking-widest">
-                        <span :class="userInfo.birthTime ? 'text-slate-200' : 'text-slate-500'">{{ userInfo.birthTime || '选择降生之时' }}</span>
-                        <span class="font-en text-gold/70 text-xs tracking-[0.25em]">TIME</span>
-                    </button>
+                    <input
+                        :value="userInfo.birthTime"
+                        @input="handleBirthTimeInput"
+                        @blur="normalizeBirthTime"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="5"
+                        placeholder="按顺序输入 0930"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest font-en"
+                    >
+                    <p class="mt-2 text-xs tracking-widest text-slate-500">输入数字后自动整理为 `HH:MM`</p>
                 </div>
 
                 <div>
@@ -333,9 +330,9 @@
             
             <div class="mt-12 flex space-x-8 items-center">
                 <button @click="step = 'intro4'" class="text-slate-500 hover:text-slate-100 transition-colors tracking-widest text-sm font-medium">← 返回</button>
-                <button @click="startTest" :disabled="!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime || userInfo.mbti.length !== 4" :class="(!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime || userInfo.mbti.length !== 4) ? 'opacity-50 cursor-not-allowed border-slate-700 text-slate-500' : 'border-gold/40 text-slate-300 hover:text-gold hover:border-gold shadow-sm hover:shadow-md bg-white/5'" class="group relative px-10 py-3 rounded-full border transition-all duration-500 tracking-[0.3em] overflow-hidden">
+                <button @click="startTest" :disabled="!isFormReady" :class="!isFormReady ? 'opacity-50 cursor-not-allowed border-slate-700 text-slate-500' : 'border-gold/40 text-slate-300 hover:text-gold hover:border-gold shadow-sm hover:shadow-md bg-white/5'" class="group relative px-10 py-3 rounded-full border transition-all duration-500 tracking-[0.3em] overflow-hidden">
                     <span class="relative z-10 font-medium">罗盘校准 <span class="font-en text-xs ml-2">→</span></span>
-                    <div v-if="userInfo.name && userInfo.gender && userInfo.birthDate && userInfo.birthTime && userInfo.mbti.length === 4" class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                    <div v-if="isFormReady" class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
         </div>
@@ -534,55 +531,6 @@
         </div>
     </transition>
 
-    <teleport to="body">
-        <div v-if="showDatePicker" @click.self="showDatePicker = false" class="picker-overlay">
-            <div class="picker-dialog glass-panel rounded-3xl p-6 md:p-8 border border-gold/20 shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
-                <div class="text-center mb-6">
-                    <p class="font-en text-gold/70 text-xs tracking-[0.45em] uppercase mb-2">Birth Date Portal</p>
-                    <h3 class="text-slate-100 text-xl tracking-widest font-medium">选择降生之日</h3>
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                    <select v-model="dateDraft.year" @change="refreshDayOptions" class="picker-select">
-                        <option v-for="year in yearOptions" :key="year" :value="String(year)">{{ year }} 年</option>
-                    </select>
-                    <select v-model="dateDraft.month" @change="refreshDayOptions" class="picker-select">
-                        <option v-for="month in monthOptions" :key="month" :value="month">{{ month }} 月</option>
-                    </select>
-                    <select v-model="dateDraft.day" class="picker-select">
-                        <option v-for="day in availableDays" :key="day" :value="day">{{ day }} 日</option>
-                    </select>
-                </div>
-                <div class="mt-6 flex items-center justify-between gap-4">
-                    <button type="button" @click="showDatePicker = false" class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-slate-100 hover:border-slate-500 transition-all">取消</button>
-                    <button type="button" @click="confirmDatePicker" class="flex-1 py-3 rounded-xl border border-gold/40 text-gold bg-gold/10 hover:bg-gold hover:text-slate-950 transition-all">确认日期</button>
-                </div>
-            </div>
-        </div>
-    </teleport>
-
-    <teleport to="body">
-        <div v-if="showTimePicker" @click.self="showTimePicker = false" class="picker-overlay">
-            <div class="picker-dialog glass-panel rounded-3xl p-6 md:p-8 border border-gold/20 shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
-                <div class="text-center mb-6">
-                    <p class="font-en text-gold/70 text-xs tracking-[0.45em] uppercase mb-2">Birth Time Portal</p>
-                    <h3 class="text-slate-100 text-xl tracking-widest font-medium">选择降生之时</h3>
-                </div>
-                <div class="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
-                    <select v-model="timeDraft.hour" class="picker-select">
-                        <option v-for="hour in hourOptions" :key="hour" :value="hour">{{ hour }} 时</option>
-                    </select>
-                    <div class="text-gold font-en text-xl text-center">:</div>
-                    <select v-model="timeDraft.minute" class="picker-select">
-                        <option v-for="minute in minuteOptions" :key="minute" :value="minute">{{ minute }} 分</option>
-                    </select>
-                </div>
-                <div class="mt-6 flex items-center justify-between gap-4">
-                    <button type="button" @click="showTimePicker = false" class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-slate-100 hover:border-slate-500 transition-all">取消</button>
-                    <button type="button" @click="confirmTimePicker" class="flex-1 py-3 rounded-xl border border-gold/40 text-gold bg-gold/10 hover:bg-gold hover:text-slate-950 transition-all">确认时间</button>
-                </div>
-            </div>
-        </div>
-    </teleport>
 </div>
 
 <!-- ================= COPYWRITING DATA & VUE LOGIC ================= -->
@@ -655,7 +603,7 @@
     }
 
     // ---------------- VUE APP SCRIPT ----------------
-    const { createApp, ref, onMounted } = Vue;
+    const { createApp, ref, computed, onMounted } = Vue;
 
     // 随机抽取器，确保每次结果有细微差别
     const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -958,49 +906,69 @@
                 };
             };
 
-            const showDatePicker = ref(false);
-            const showTimePicker = ref(false);
-            const yearOptions = Array.from({ length: new Date().getFullYear() - 1949 }, (_, i) => String(new Date().getFullYear() - i));
-            const monthOptions = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
-            const hourOptions = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
-            const minuteOptions = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
-            const availableDays = ref([]);
-            const dateDraft = ref({ year: '', month: '', day: '' });
-            const timeDraft = ref({ hour: '12', minute: '00' });
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-            const refreshDayOptions = () => {
-                const year = Number(dateDraft.value.year) || new Date().getFullYear();
-                const month = Number(dateDraft.value.month) || 1;
-                const totalDays = new Date(year, month, 0).getDate();
-                availableDays.value = Array.from({ length: totalDays }, (_, i) => String(i + 1).padStart(2, '0'));
-                if (!availableDays.value.includes(dateDraft.value.day)) {
-                    dateDraft.value.day = availableDays.value[Math.min(totalDays - 1, 0)] || '01';
-                }
+            const formatDateDigits = (value) => {
+                const digits = value.replace(/\D/g, '').slice(0, 8);
+                if (digits.length <= 4) return digits;
+                if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+                return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`;
             };
 
-            const openDatePicker = () => {
-                const now = new Date();
-                const [year = String(now.getFullYear()), month = String(now.getMonth() + 1).padStart(2, '0'), day = String(now.getDate()).padStart(2, '0')] = (userInfo.value.birthDate || '').split('-');
-                dateDraft.value = { year, month, day };
-                refreshDayOptions();
-                showDatePicker.value = true;
+            const formatTimeDigits = (value) => {
+                const digits = value.replace(/\D/g, '').slice(0, 4);
+                if (digits.length <= 2) return digits;
+                return `${digits.slice(0, 2)}:${digits.slice(2, 4)}`;
             };
 
-            const confirmDatePicker = () => {
-                userInfo.value.birthDate = `${dateDraft.value.year}-${dateDraft.value.month}-${dateDraft.value.day}`;
-                showDatePicker.value = false;
+            const isValidDateString = (value) => {
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+                const [year, month, day] = value.split('-').map(Number);
+                if (month < 1 || month > 12) return false;
+                const maxDay = new Date(year, month, 0).getDate();
+                return day >= 1 && day <= maxDay;
             };
 
-            const openTimePicker = () => {
-                const [hour = '12', minute = '00'] = (userInfo.value.birthTime || '').split(':');
-                timeDraft.value = { hour, minute };
-                showTimePicker.value = true;
+            const isValidTimeString = (value) => {
+                if (!/^\d{2}:\d{2}$/.test(value)) return false;
+                const [hour, minute] = value.split(':').map(Number);
+                return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
             };
 
-            const confirmTimePicker = () => {
-                userInfo.value.birthTime = `${timeDraft.value.hour}:${timeDraft.value.minute}`;
-                showTimePicker.value = false;
+            const handleBirthDateInput = (event) => {
+                const nextValue = formatDateDigits(event.target.value);
+                userInfo.value.birthDate = nextValue;
             };
+
+            const handleBirthTimeInput = (event) => {
+                const nextValue = formatTimeDigits(event.target.value);
+                userInfo.value.birthTime = nextValue;
+            };
+
+            const normalizeBirthDate = () => {
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(userInfo.value.birthDate)) return;
+                let [year, month, day] = userInfo.value.birthDate.split('-').map(Number);
+                month = clamp(month, 1, 12);
+                const maxDay = new Date(year, month, 0).getDate();
+                day = clamp(day, 1, maxDay);
+                userInfo.value.birthDate = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            };
+
+            const normalizeBirthTime = () => {
+                if (!/^\d{2}:\d{2}$/.test(userInfo.value.birthTime)) return;
+                let [hour, minute] = userInfo.value.birthTime.split(':').map(Number);
+                hour = clamp(hour, 0, 23);
+                minute = clamp(minute, 0, 59);
+                userInfo.value.birthTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+            };
+
+            const isFormReady = computed(() => {
+                return !!userInfo.value.name
+                    && !!userInfo.value.gender
+                    && isValidDateString(userInfo.value.birthDate)
+                    && isValidTimeString(userInfo.value.birthTime)
+                    && userInfo.value.mbti.length === 4;
+            });
 
             const startTest = () => {
                 step.value = 'question';
@@ -1133,20 +1101,11 @@
                 finalCode,
                 resetTest,
                 userInfo,
-                showDatePicker,
-                showTimePicker,
-                yearOptions,
-                monthOptions,
-                hourOptions,
-                minuteOptions,
-                availableDays,
-                dateDraft,
-                timeDraft,
-                refreshDayOptions,
-                openDatePicker,
-                confirmDatePicker,
-                openTimePicker,
-                confirmTimePicker
+                isFormReady,
+                handleBirthDateInput,
+                handleBirthTimeInput,
+                normalizeBirthDate,
+                normalizeBirthTime
             };
         }
     }).mount('#app');
