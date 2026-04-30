@@ -700,7 +700,7 @@
 
     createApp({
         setup() {
-            const step = ref('intro1'); // intro1, intro2, intro3, intro4, question, loading, result
+            const step = ref('intro1'); // intro1, intro2, intro3, intro4, userInfo, question, loading, result
             const currentQuestionIndex = ref(0);
             const answers = ref([]);
             const loadingProgress = ref(0);
@@ -781,9 +781,14 @@
                 const combinedStr = `${info.name}-${info.gender}-${info.birthDate}-${info.birthTime}`;
                 const hashNum = hashString(combinedStr);
                 
+                // 采用多次哈希或加盐确保索引为正数且在 0-7 范围内
+                const upperIndex = hashNum % 8;
+                const lowerIndex = (hashNum + 13) % 8;
+                const dirIndex = (hashNum + 37) % 8;
+                
                 return {
-                    hexagram: bagua[hashNum % 8] + ' 为上，' + bagua[(hashNum >> 3) % 8] + ' 为下',
-                    direction: compass[(hashNum >> 6) % 8]
+                    hexagram: bagua[upperIndex] + ' 为上，' + bagua[lowerIndex] + ' 为下',
+                    direction: compass[dirIndex]
                 };
             };
 
@@ -903,7 +908,8 @@
                 hexStream,
                 result,
                 finalCode,
-                resetTest
+                resetTest,
+                userInfo
             };
         }
     }).mount('#app');
