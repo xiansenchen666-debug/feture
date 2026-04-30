@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
@@ -335,12 +335,12 @@
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生日期 <span class="font-en text-gold/60 text-xs ml-1">DATE OF BIRTH</span></label>
-                    <input id="birthDateInput" v-model="userInfo.birthDate" type="text" placeholder="选择降生之日" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
+                    <input id="birthDateInput" v-model="userInfo.birthDate" type="text" readonly placeholder="选择降生之日" class="w-full cursor-pointer bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
                 </div>
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生时间 <span class="font-en text-gold/60 text-xs ml-1">TIME OF BIRTH</span></label>
-                    <input id="birthTimeInput" v-model="userInfo.birthTime" type="text" placeholder="选择降生之时" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
+                    <input id="birthTimeInput" v-model="userInfo.birthTime" type="text" readonly placeholder="选择降生之时" class="w-full cursor-pointer bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
                 </div>
 
                 <div>
@@ -926,6 +926,55 @@
                 };
             };
 
+            let datePickerInstance = null;
+            let timePickerInstance = null;
+
+            const initPickers = async () => {
+                await nextTick();
+
+                if (typeof flatpickr !== 'function') {
+                    console.error('Flatpickr failed to load.');
+                    return;
+                }
+
+                const dateInput = document.getElementById('birthDateInput');
+                const timeInput = document.getElementById('birthTimeInput');
+
+                if (!dateInput || !timeInput) return;
+
+                if (datePickerInstance) datePickerInstance.destroy();
+                if (timePickerInstance) timePickerInstance.destroy();
+
+                const zhLocale = flatpickr.l10ns?.zh || flatpickr.l10ns?.default || undefined;
+
+                datePickerInstance = flatpickr(dateInput, {
+                    dateFormat: 'Y-m-d',
+                    disableMobile: true,
+                    clickOpens: true,
+                    allowInput: false,
+                    locale: zhLocale,
+                    defaultDate: userInfo.value.birthDate || null,
+                    onChange: function(selectedDates, dateStr) {
+                        userInfo.value.birthDate = dateStr;
+                    }
+                });
+
+                timePickerInstance = flatpickr(timeInput, {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: 'H:i',
+                    time_24hr: true,
+                    disableMobile: true,
+                    clickOpens: true,
+                    allowInput: false,
+                    locale: zhLocale,
+                    defaultDate: userInfo.value.birthTime || null,
+                    onChange: function(selectedDates, dateStr) {
+                        userInfo.value.birthTime = dateStr;
+                    }
+                });
+            };
+
             const startTest = () => {
                 step.value = 'question';
                 currentQuestionIndex.value = 0;
@@ -935,26 +984,7 @@
             // 监听 step 变化，在进入 userInfo 时初始化 Flatpickr
             watch(step, async (newVal) => {
                 if (newVal === 'userInfo') {
-                    await nextTick();
-                    flatpickr("#birthDateInput", {
-                        dateFormat: "Y-m-d",
-                        disableMobile: true,
-                        locale: "zh",
-                        onChange: function(selectedDates, dateStr) {
-                            userInfo.value.birthDate = dateStr;
-                        }
-                    });
-                    flatpickr("#birthTimeInput", {
-                        enableTime: true,
-                        noCalendar: true,
-                        dateFormat: "H:i",
-                        time_24hr: true,
-                        disableMobile: true,
-                        locale: "zh",
-                        onChange: function(selectedDates, dateStr) {
-                            userInfo.value.birthTime = dateStr;
-                        }
-                    });
+                    await initPickers();
                 }
             });
 
@@ -1067,6 +1097,10 @@
                 setTimeout(() => {
                     if (typeof initCanvas === 'function') initCanvas();
                 }, 100);
+
+                if (step.value === 'userInfo') {
+                    await initPickers();
+                }
             });
 
             return {
