@@ -6,6 +6,10 @@
     <title>SOUL TRACE | 灵魂寻迹</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
@@ -139,6 +143,57 @@
             60% { transform: skew(-2deg); }
             80% { transform: skew(2deg); }
             100% { transform: skew(0deg); }
+        }
+
+        /* --- Akashic Theme for Flatpickr --- */
+        .flatpickr-calendar {
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(212, 175, 55, 0.3) !important;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(212, 175, 55, 0.05) !important;
+            font-family: 'Noto Serif SC', serif !important;
+        }
+        .flatpickr-day {
+            color: var(--text-muted) !important;
+            border-radius: 8px !important;
+        }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+            background: rgba(212, 175, 55, 0.8) !important;
+            color: var(--dark-bg) !important;
+            border-color: var(--gold) !important;
+            font-weight: 600;
+        }
+        .flatpickr-day:hover, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.nextMonthDay:hover, .flatpickr-day:focus, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.nextMonthDay:focus {
+            background: rgba(212, 175, 55, 0.15) !important;
+            border-color: rgba(212, 175, 55, 0.3) !important;
+            color: var(--gold) !important;
+        }
+        .flatpickr-time input {
+            color: var(--gold) !important;
+            font-family: 'Cinzel', serif !important;
+        }
+        .flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time input:focus, .flatpickr-time .flatpickr-am-pm:focus {
+            background: rgba(212, 175, 55, 0.1) !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            color: var(--gold) !important;
+            fill: var(--gold) !important;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            background: var(--dark-bg) !important;
+            color: var(--gold) !important;
+        }
+        .flatpickr-weekdays .flatpickr-weekday {
+            color: var(--gold) !important;
+            opacity: 0.7;
+        }
+        span.flatpickr-weekday {
+            font-family: 'Cinzel', serif !important;
+            letter-spacing: 0.1em;
+        }
+        .flatpickr-time .flatpickr-time-separator, .flatpickr-time .flatpickr-am-pm {
+            color: var(--gold) !important;
         }
     </style>
 </head>
@@ -280,12 +335,12 @@
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生日期 <span class="font-en text-gold/60 text-xs ml-1">DATE OF BIRTH</span></label>
-                    <input v-model="userInfo.birthDate" type="date" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest [color-scheme:dark]">
+                    <input id="birthDateInput" v-model="userInfo.birthDate" type="text" placeholder="选择降生之日" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
                 </div>
 
                 <div>
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生时间 <span class="font-en text-gold/60 text-xs ml-1">TIME OF BIRTH</span></label>
-                    <input v-model="userInfo.birthTime" type="time" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest [color-scheme:dark]">
+                    <input id="birthTimeInput" v-model="userInfo.birthTime" type="text" placeholder="选择降生之时" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest">
                 </div>
 
                 <div>
@@ -568,7 +623,7 @@
     }
 
     // ---------------- VUE APP SCRIPT ----------------
-    const { createApp, ref, onMounted } = Vue;
+    const { createApp, ref, onMounted, watch, nextTick } = Vue;
 
     // 随机抽取器，确保每次结果有细微差别
     const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -876,6 +931,32 @@
                 currentQuestionIndex.value = 0;
                 answers.value = [];
             };
+
+            // 监听 step 变化，在进入 userInfo 时初始化 Flatpickr
+            watch(step, async (newVal) => {
+                if (newVal === 'userInfo') {
+                    await nextTick();
+                    flatpickr("#birthDateInput", {
+                        dateFormat: "Y-m-d",
+                        disableMobile: true,
+                        locale: "zh",
+                        onChange: function(selectedDates, dateStr) {
+                            userInfo.value.birthDate = dateStr;
+                        }
+                    });
+                    flatpickr("#birthTimeInput", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true,
+                        disableMobile: true,
+                        locale: "zh",
+                        onChange: function(selectedDates, dateStr) {
+                            userInfo.value.birthTime = dateStr;
+                        }
+                    });
+                }
+            });
 
             const answerQuestion = (val) => {
                 answers.value.push(val);
