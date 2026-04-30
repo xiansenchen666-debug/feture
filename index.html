@@ -287,13 +287,18 @@
                     <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">出生时间 <span class="font-en text-gold/60 text-xs ml-1">TIME OF BIRTH</span></label>
                     <input v-model="userInfo.birthTime" type="time" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest [color-scheme:dark]">
                 </div>
+
+                <div>
+                    <label class="block text-slate-300 text-sm tracking-widest mb-2 font-medium">MBTI 灵魂频率 <span class="font-en text-gold/60 text-xs ml-1">MBTI TYPE</span></label>
+                    <input v-model="userInfo.mbti" type="text" maxlength="4" placeholder="例如：INTJ, ENFP..." class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all tracking-widest font-en uppercase" @input="userInfo.mbti = userInfo.mbti.toUpperCase()">
+                </div>
             </div>
             
             <div class="mt-12 flex space-x-8 items-center">
                 <button @click="step = 'intro4'" class="text-slate-500 hover:text-slate-100 transition-colors tracking-widest text-sm font-medium">← 返回</button>
-                <button @click="startTest" :disabled="!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime" :class="(!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime) ? 'opacity-50 cursor-not-allowed border-slate-700 text-slate-500' : 'border-gold/40 text-slate-300 hover:text-gold hover:border-gold shadow-sm hover:shadow-md bg-white/5'" class="group relative px-10 py-3 rounded-full border transition-all duration-500 tracking-[0.3em] overflow-hidden">
+                <button @click="startTest" :disabled="!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime || userInfo.mbti.length !== 4" :class="(!userInfo.name || !userInfo.gender || !userInfo.birthDate || !userInfo.birthTime || userInfo.mbti.length !== 4) ? 'opacity-50 cursor-not-allowed border-slate-700 text-slate-500' : 'border-gold/40 text-slate-300 hover:text-gold hover:border-gold shadow-sm hover:shadow-md bg-white/5'" class="group relative px-10 py-3 rounded-full border transition-all duration-500 tracking-[0.3em] overflow-hidden">
                     <span class="relative z-10 font-medium">罗盘校准 <span class="font-en text-xs ml-2">→</span></span>
-                    <div v-if="userInfo.name && userInfo.gender && userInfo.birthDate && userInfo.birthTime" class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                    <div v-if="userInfo.name && userInfo.gender && userInfo.birthDate && userInfo.birthTime && userInfo.mbti.length === 4" class="absolute inset-0 bg-gold/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
                 </button>
             </div>
         </div>
@@ -372,15 +377,21 @@
                 
                 <!-- User Info & Astrology (New Section) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 px-2">
-                    <div class="glass-card p-4 rounded-xl border border-gold/10 bg-slate-800/20 text-center">
+                    <div class="glass-card p-4 rounded-xl border border-gold/10 bg-slate-800/20 text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-gold/50 to-transparent"></div>
                         <p class="text-xs text-slate-500 font-en tracking-widest mb-1">TARGET IDENTITY</p>
                         <p class="text-sm text-gold font-medium tracking-widest">{{ userInfo.name }} <span class="text-slate-400 text-xs ml-1">{{ userInfo.gender === 'M' ? '(男)' : '(女)' }}</span></p>
-                        <p class="text-xs text-slate-400 tracking-wider mt-1">{{ userInfo.birthDate }} {{ userInfo.birthTime }}</p>
+                        <p class="text-xs text-slate-400 tracking-wider mt-1 mb-2">{{ userInfo.birthDate }} {{ userInfo.birthTime }}</p>
+                        <div class="inline-block px-3 py-1 border border-gold/20 rounded bg-slate-900/50">
+                            <span class="text-xs text-gold/80 font-en tracking-widest">MBTI: {{ userInfo.mbti }}</span>
+                        </div>
                     </div>
-                    <div class="glass-card p-4 rounded-xl border border-gold/10 bg-slate-800/20 text-center">
+                    <div class="glass-card p-4 rounded-xl border border-gold/10 bg-slate-800/20 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-transparent via-gold/50 to-transparent"></div>
                         <p class="text-xs text-slate-500 font-en tracking-widest mb-1">AKASHIC COMPASS</p>
                         <p class="text-sm text-gold font-medium tracking-widest">{{ result.hexagram }}</p>
                         <p class="text-xs text-slate-400 tracking-wider mt-1">本命方位：{{ result.compassDirection }}</p>
+                        <p class="text-xs text-slate-400 tracking-wider mt-1">纳音：{{ result.nayin }}</p>
                     </div>
                 </div>
 
@@ -389,8 +400,46 @@
                     " {{ result.originDest }} "
                 </div>
 
+                <!-- Deep Metaphysical Analysis Grid -->
+                <div class="mb-10 mt-6">
+                    <div class="flex items-center justify-center mb-8 relative">
+                        <div class="w-12 h-px bg-gradient-to-r from-transparent to-gold/40"></div>
+                        <h4 class="text-slate-100 font-medium tracking-widest text-base mx-4">【 灵魂潜能解构 】</h4>
+                        <div class="w-12 h-px bg-gradient-to-l from-transparent to-gold/40"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="glass-card p-5 rounded-xl border border-slate-700 bg-slate-800/30 hover:border-gold/30 transition-colors">
+                            <p class="font-en text-gold text-[10px] tracking-[0.3em] mb-2 uppercase">Wu Xing Energy</p>
+                            <p class="text-sm text-slate-200 font-medium mb-1">五行能量分布</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">{{ result.wuxing }}</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-xl border border-slate-700 bg-slate-800/30 hover:border-gold/30 transition-colors">
+                            <p class="font-en text-gold text-[10px] tracking-[0.3em] mb-2 uppercase">Space-Time</p>
+                            <p class="text-sm text-slate-200 font-medium mb-1">时空方位学</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">{{ result.spacetime }}</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-xl border border-slate-700 bg-slate-800/30 hover:border-gold/30 transition-colors">
+                            <p class="font-en text-gold text-[10px] tracking-[0.3em] mb-2 uppercase">Phenology</p>
+                            <p class="text-sm text-slate-200 font-medium mb-1">身体物候特征</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">{{ result.phenology }}</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-xl border border-slate-700 bg-slate-800/30 hover:border-gold/30 transition-colors">
+                            <p class="font-en text-gold text-[10px] tracking-[0.3em] mb-2 uppercase">Hidden Variable</p>
+                            <p class="text-sm text-slate-200 font-medium mb-1">隐藏的“变数”</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">{{ result.variable }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 glass-card p-5 rounded-xl border border-gold/20 bg-gradient-to-br from-slate-800/40 to-slate-900/60 text-center">
+                        <p class="font-en text-gold/80 text-[10px] tracking-[0.3em] mb-2 uppercase">Social Role & Potential</p>
+                        <p class="text-sm text-slate-100 font-medium mb-3">社会角色与潜能力</p>
+                        <p class="text-sm text-slate-300 leading-loose">{{ result.socialRole }}</p>
+                    </div>
+                </div>
+
                 <!-- Timeline: Past -> Present -> Future -->
-                <div class="space-y-6">
+                <div class="space-y-6 mt-12 pt-8 border-t border-gold/10">
                     <!-- Past Life -->
                     <section class="glass-card p-6 rounded-2xl relative overflow-hidden border border-gold/20 bg-slate-800/40 hover:bg-slate-800/60 transition-colors shadow-sm hover:shadow-md">
                         <h3 class="font-en text-gold text-xs tracking-[0.3em] mb-1 font-semibold">PREVIOUS INCARNATION</h3>
@@ -761,13 +810,38 @@
                 name: '',
                 gender: '',
                 birthDate: '',
-                birthTime: ''
+                birthTime: '',
+                mbti: ''
             });
 
-            // 基于出生信息计算卦象与罗盘方位
+            // 基于出生信息计算卦象与罗盘方位、五行等
             const calculateAstrology = (info) => {
                 const bagua = ['乾 (天)', '坤 (地)', '震 (雷)', '巽 (风)', '坎 (水)', '离 (火)', '艮 (山)', '兑 (泽)'];
                 const compass = ['正北 (子)', '东北 (丑寅)', '正东 (卯)', '东南 (辰巳)', '正南 (午)', '西南 (未申)', '正西 (酉)', '西北 (戌亥)'];
+                const nayinList = [
+                    '海中金', '炉中火', '大林木', '路旁土', '剑锋金', '山头火', '涧下水', '城头土', '白蜡金', '杨柳木',
+                    '泉中水', '屋上土', '霹雳火', '松柏木', '长流水', '沙中金', '山下火', '平地木', '壁上土', '金箔金',
+                    '覆灯火', '天河水', '大驿木', '钗钏金', '桑柘木', '大溪水', '沙中土', '天上火', '石榴木', '大海水'
+                ];
+                const wuxingDist = [
+                    '金水相生，气场清冽，宜向外探索。', '木火通明，能量炽热，带有极强的破局属性。', 
+                    '土重藏金，性格坚韧，是时代的锚点。', '水木清华，灵性极高，易感知多维空间的波动。',
+                    '五行流转平衡，气运绵长，适合作为秩序的建立者。', '火旺缺水，行动力极强，命运轨迹常有突变。'
+                ];
+                const phenologyList = [
+                    '骨骼清奇，眼神常带水气，易受月相变化影响睡眠。', '体质偏寒，但心火旺盛，适合佩戴木质法器。',
+                    '指尖常带微凉，对空间磁场变化极为敏感，容易在阴雨天获得灵感。', '生命力如野草般顽强，哪怕在极度高压下也能保持肉身的平稳。',
+                    '听觉与直觉异常敏锐，在嘈杂的人群中容易感到能量过载，需定期独处排灰。', '眼底藏有锐气，新陈代谢极快，适合在高强度的对抗中完成自我进化。'
+                ];
+                const variableList = [
+                    '逢水化劫。在带有水属性的城市或年份，命运的齿轮会发生非线性跳跃。', '在28岁后会迎来命运的折叠，原本坚信的真理将被推翻重构。',
+                    '你的灵感在雷雨天气会呈指数级放大，那是高维信息向你传输的频段。', '每逢尾数为 3 的年份，你都将面临一次身份的撕裂与重生。',
+                    '你命盘中藏着一个‘孤星’，这意味着你在最关键的时刻，只能相信自己的直觉。', '你的能量场存在一个隐秘的黑洞，会无意识吸收周围人的情绪，需学会建立结界。'
+                ];
+                const spacetimeList = [
+                    '你的高频能量场位于西北方，适合在傍晚时分进行重大决策。', '正南方的烈阳能补足你灵魂中的缺失，你的一生都将不断向温暖的地带迁徙。',
+                    '你的本命磁场在东方的海岸线最为活跃，水流的声音是你最好的镇定剂。', '无论你走到哪里，最终都会被牵引回原点，你的空间轨迹是一个完美的莫比乌斯环。'
+                ];
                 
                 // 简单的 hash 算法将字符串转为数字
                 const hashString = (str) => {
@@ -778,17 +852,22 @@
                     return Math.abs(hash);
                 };
 
-                const combinedStr = `${info.name}-${info.gender}-${info.birthDate}-${info.birthTime}`;
+                const combinedStr = `${info.name}-${info.gender}-${info.birthDate}-${info.birthTime}-${info.mbti}`;
                 const hashNum = hashString(combinedStr);
                 
-                // 采用多次哈希或加盐确保索引为正数且在 0-7 范围内
+                // 采用多次哈希或加盐确保索引为正数且在范围内
                 const upperIndex = hashNum % 8;
                 const lowerIndex = (hashNum + 13) % 8;
                 const dirIndex = (hashNum + 37) % 8;
                 
                 return {
                     hexagram: bagua[upperIndex] + ' 为上，' + bagua[lowerIndex] + ' 为下',
-                    direction: compass[dirIndex]
+                    direction: compass[dirIndex],
+                    nayin: nayinList[hashNum % 30],
+                    wuxing: wuxingDist[(hashNum + 7) % wuxingDist.length],
+                    phenology: phenologyList[(hashNum + 19) % phenologyList.length],
+                    variable: variableList[(hashNum + 43) % variableList.length],
+                    spacetime: spacetimeList[(hashNum + 71) % spacetimeList.length]
                 };
             };
 
@@ -845,10 +924,22 @@
                 const c4 = code[3]; // V or B
                 const c5 = code[4]; // S or M
 
-                // 计算卦象与方位
+                // 计算卦象与方位等深度解析数据
                 const astro = calculateAstrology(userInfo.value);
                 result.value.hexagram = astro.hexagram;
                 result.value.compassDirection = astro.direction;
+                result.value.nayin = astro.nayin;
+                result.value.wuxing = astro.wuxing;
+                result.value.phenology = astro.phenology;
+                result.value.variable = astro.variable;
+                result.value.spacetime = astro.spacetime;
+
+                // 结合 MBTI 生成社会角色与潜能力
+                const roleRoles = {
+                    'C': '隐士/破局者',
+                    'T': '秩序建立者/守望者'
+                };
+                result.value.socialRole = `作为携带 ${userInfo.value.mbti} 频率的灵魂，你表面的社会角色是【${roleRoles[c1]}】，但深层潜能是利用 ${userInfo.value.mbti} 独特的直觉与分析网，在关键时刻扭转他人的命运轨迹。`;
 
                 // 使用随机抽取函数确保文案多样性
                 result.value.identity = pick(database.identity[c1 + c3]);
